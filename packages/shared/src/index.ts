@@ -11,11 +11,19 @@ export const sharedVersion = "0.0.1";
  * Represents a single metric extracted from a medical report or financial document
  */
 export const MetricItemSchema = z.object({
-  key: z.string().describe('Standardized name of the metric (e.g., "WBC", "ALT")'),
+  key: z.string().describe('Short identifier for the metric (e.g., "wbc", "alt", "total_amount")'),
+  name: z.string().describe('Human-readable name (e.g., "White Blood Cell Count", "Total Amount")'),
   value: z.number().describe('The numeric value of the metric'),
-  unit: z.string().optional().describe('Unit of measurement (e.g., "U/L", "mmol/L")'),
-  status: z.enum(['normal', 'high', 'low', 'positive', 'negative']).describe('Status indicator'),
-  reference: z.string().optional().describe('Reference range (e.g., "3.5-9.5")'),
+  unit: z.string().optional().describe('Unit of measurement (e.g., "U/L", "mmol/L", "USD")'),
+  status: z.enum([
+    'normal', 'high', 'low', 'positive', 'negative',  // Health status values
+    'income', 'expense', 'neutral'                     // Finance status values
+  ]).describe('Status indicator'),
+  reference: z.string().optional().describe('Reference range (e.g., "3.5-9.5", "Negative")'),
+  notes: z.string().optional().describe('Additional context or notes about the metric'),
+  displayOrder: z.number().optional().describe('Order for UI display (0, 1, 2, ...)'),
+  categoryTag: z.string().optional().describe('Category/group tag (e.g., "liver_function", "food_drink")'),
+  parentKey: z.string().optional().describe('Parent metric key for hierarchical data (e.g., line items under "subtotal")'),
 });
 
 /**

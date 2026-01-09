@@ -37,15 +37,23 @@ export const metrics = sqliteTable(
     recordId: text('record_id')
       .notNull()
       .references(() => records.id, { onDelete: 'cascade' }), // Foreign key with cascade delete
-    key: text('key').notNull(), // Metric name (e.g., "WBC", "ALT")
+    key: text('key').notNull(), // Short identifier (e.g., "wbc", "alt")
+    name: text('name').notNull(), // Human-readable name (e.g., "White Blood Cell Count")
     value: real('value').notNull(), // Normalized numeric value
-    unit: text('unit'), // Unit of measurement
+    unit: text('unit'), // Unit of measurement (e.g., "mg/dL", "USD")
     status: text('status', {
-      enum: ['normal', 'high', 'low', 'positive', 'negative'],
+      enum: ['normal', 'high', 'low', 'positive', 'negative', 'income', 'expense', 'neutral'],
     }).notNull(),
+    reference: text('reference'), // Reference range (e.g., "3.5-9.5", "Negative")
+    notes: text('notes'), // Additional context or notes about the metric
+    displayOrder: integer('display_order'), // Order for UI display (0, 1, 2, ...)
+    categoryTag: text('category_tag'), // Category/group (e.g., "liver_function", "food_drink")
+    parentKey: text('parent_key'), // Parent metric key for hierarchical data
   },
   (table) => [
     index('idx_metrics_record_id').on(table.recordId),
     index('idx_metrics_key').on(table.key),
+    index('idx_metrics_category_tag').on(table.categoryTag),
+    index('idx_metrics_parent_key').on(table.parentKey),
   ]
 );

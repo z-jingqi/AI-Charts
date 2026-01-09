@@ -45,9 +45,15 @@ export async function saveRecordData(
         db.insert(metrics).values({
           recordId,
           key: item.key,
+          name: item.name,
           value: item.value,
           unit: item.unit || null,
           status: item.status,
+          reference: item.reference || null,
+          notes: item.notes || null,
+          displayOrder: item.displayOrder ?? null,
+          categoryTag: item.categoryTag || null,
+          parentKey: item.parentKey || null,
         })
       )
     );

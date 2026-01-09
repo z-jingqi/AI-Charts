@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "911eecb7-1504-41be-b036-941136ea7247",
+  "id": "1b1ead72-be02-481b-97fb-5929fb74f469",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "metrics": {
@@ -28,6 +28,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "value": {
           "name": "value",
           "type": "real",
@@ -48,6 +55,41 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "reference": {
+          "name": "reference",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "display_order": {
+          "name": "display_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "category_tag": {
+          "name": "category_tag",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "parent_key": {
+          "name": "parent_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {
@@ -62,6 +104,20 @@
           "name": "idx_metrics_key",
           "columns": [
             "key"
+          ],
+          "isUnique": false
+        },
+        "idx_metrics_category_tag": {
+          "name": "idx_metrics_category_tag",
+          "columns": [
+            "category_tag"
+          ],
+          "isUnique": false
+        },
+        "idx_metrics_parent_key": {
+          "name": "idx_metrics_parent_key",
+          "columns": [
+            "parent_key"
           ],
           "isUnique": false
         }
