@@ -1,0 +1,39 @@
+name = "ai-chart-server"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[build]
+command = "npm run build"
+
+# Environment Variables
+# ⚠️  NEVER PUT ACTUAL API KEYS IN THIS FILE - IT WILL BE COMMITTED TO GIT! ⚠️
+#
+# For local development:
+#   - Create .dev.vars file (gitignored) with actual keys
+#
+# For production:
+#   - Set variables in Cloudflare dashboard: Settings > Variables and Secrets
+#
+# Required variables (set at least one):
+#   - DEFAULT_PROVIDER (optional): google, openai, anthropic, deepseek, openrouter, cloudflare
+#   - GOOGLE_GENERATIVE_AI_API_KEY
+#   - OPENAI_API_KEY
+#   - ANTHROPIC_API_KEY
+#   - DEEPSEEK_API_KEY
+#   - OPENROUTER_API_KEY
+#   - CLOUDFLARE_ACCOUNT_ID + CLOUDFLARE_API_KEY
+#
+# Keep the [vars] section empty below:
+[vars]
+# Leave empty - do not add keys here!
+
+# D1 Database Binding
+[[d1_databases]]
+binding = "DB"
+database_name = "ai-chart-db"
+database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" # Replace with actual database ID after creation
+
+# Cloudflare Workers AI Binding (optional)
+# Uncomment to use Cloudflare Workers AI models
+# [ai]
+# binding = "AI"

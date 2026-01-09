@@ -1,0 +1,33 @@
+{
+  "name": "@ai-chart/ai-core",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@ai-chart/shared": "workspace:*",
+    "@ai-sdk/anthropic": "^3.0.9",
+    "@ai-sdk/google": "^3.0.6",
+    "@ai-sdk/openai": "^3.0.7",
+    "@openrouter/ai-sdk-provider": "^1.5.4",
+    "ai": "^6.0.23",
+    "pdfjs-dist": "^5.4.530",
+    "workers-ai-provider": "^3.0.2",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "typescript": "^5.7.2"
+  }
+}
