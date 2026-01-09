@@ -171,26 +171,6 @@ export async function extractDataFromPDF(
 }
 
 /**
- * Extract health data from PDF with configurable strategy
- * @deprecated Use extractDataFromPDF(env, pdfBuffer, 'health', options) instead
- * @param env - Environment variables from Cloudflare Workers context
- * @param pdfBuffer - PDF file as ArrayBuffer
- * @param options - Extraction options
- * @returns Extracted and validated health data
- */
-export async function extractHealthDataFromPDF(
-  env: AIEnvironment,
-  pdfBuffer: ArrayBuffer,
-  options?: {
-    modelId?: string;
-    provider?: ModelProvider;
-    strategy?: PDFExtractionStrategy;
-  }
-): Promise<RecordData> {
-  return extractDataFromPDF(env, pdfBuffer, 'health', options);
-}
-
-/**
  * Extract data from PDF using vision AI
  * Internal function used by main extraction
  */
@@ -294,69 +274,4 @@ function mergeMultiPageResults(results: RecordData[]): RecordData {
   merged.items = Array.from(uniqueItems.values());
 
   return merged;
-}
-
-/**
- * Extract data from PDF with retry logic (domain-agnostic)
- * @param env - Environment variables from Cloudflare Workers context
- * @param pdfBuffer - PDF file as ArrayBuffer
- * @param domain - Data domain ('health' | 'finance')
- * @param maxRetries - Maximum number of retry attempts
- * @param options - Extraction options
- * @returns Extracted and validated data
- */
-export async function extractDataFromPDFWithRetry(
-  env: AIEnvironment,
-  pdfBuffer: ArrayBuffer,
-  domain: DataDomain = 'health',
-  maxRetries = 3,
-  options?: {
-    modelId?: string;
-    provider?: ModelProvider;
-    strategy?: PDFExtractionStrategy;
-  }
-): Promise<RecordData> {
-  let lastError: Error | null = null;
-
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      return await extractDataFromPDF(env, pdfBuffer, domain, options);
-    } catch (error) {
-      lastError = error instanceof Error ? error : new Error("Unknown error");
-
-      if (attempt === maxRetries) {
-        break;
-      }
-
-      // Exponential backoff
-      const delay = Math.min(1000 * Math.pow(2, attempt - 1), 10000);
-      await new Promise((resolve) => setTimeout(resolve, delay));
-    }
-  }
-
-  throw new Error(
-    `Failed to extract ${domain} data from PDF after ${maxRetries} attempts: ${lastError?.message}`
-  );
-}
-
-/**
- * Extract health data from PDF with retry logic
- * @deprecated Use extractDataFromPDFWithRetry(env, pdfBuffer, 'health', maxRetries, options) instead
- * @param env - Environment variables from Cloudflare Workers context
- * @param pdfBuffer - PDF file as ArrayBuffer
- * @param maxRetries - Maximum number of retry attempts
- * @param options - Extraction options
- * @returns Extracted and validated health data
- */
-export async function extractHealthDataFromPDFWithRetry(
-  env: AIEnvironment,
-  pdfBuffer: ArrayBuffer,
-  maxRetries = 3,
-  options?: {
-    modelId?: string;
-    provider?: ModelProvider;
-    strategy?: PDFExtractionStrategy;
-  }
-): Promise<RecordData> {
-  return extractDataFromPDFWithRetry(env, pdfBuffer, 'health', maxRetries, options);
 }

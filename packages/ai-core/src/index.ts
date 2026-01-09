@@ -24,20 +24,11 @@ export {
 // Image Data Extraction (domain-agnostic)
 export {
   extractDataFromImage,
-  extractDataFromImageWithRetry,
-  // Backward compatible exports
-  extractHealthDataFromImage,
-  extractHealthDataFromImageWithRetry,
 } from './extractors/image';
 
 // PDF Data Extraction (domain-agnostic)
 export {
   extractDataFromPDF,
-  extractDataFromPDFWithRetry,
-  // Backward compatible exports
-  extractHealthDataFromPDF,
-  extractHealthDataFromPDFWithRetry,
-  // Utilities
   convertPDFToImages,
   extractTextFromPDF,
 } from './extractors/pdf';

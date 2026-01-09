@@ -4,10 +4,8 @@ import { sharedVersion } from '@ai-chart/shared';
 import { aiCoreVersion } from '@ai-chart/ai-core';
 import { createDb } from '@ai-chart/database';
 
-// Legacy routes (backward compatible)
+// Chat route
 import chatRoute from './routes/chat';
-import uploadRoute from './routes/upload';
-import recordsRoute from './routes/records';
 
 // Domain-specific routes
 import healthUploadRoute from './routes/health/upload';
@@ -35,24 +33,21 @@ const app = new Hono<{ Bindings: Env }>();
 
 app.use('/*', cors());
 
-// Domain-specific API routes (v2)
+// Domain-specific API routes
 app.route('/api/health/upload', healthUploadRoute);
 app.route('/api/health/records', healthRecordsRoute);
 app.route('/api/finance/upload', financeUploadRoute);
 app.route('/api/finance/records', financeRecordsRoute);
 
-// Legacy API routes (v1 - backward compatible, defaults to health)
+// Chat route
 app.route('/api/chat', chatRoute);
-app.route('/api/upload', uploadRoute);
-app.route('/api/records', recordsRoute);
 
 // Root endpoint
 app.get('/', (c) => {
   return c.json({
     message: 'AI-Chart API Server',
-    version: '0.0.2',
+    version: '0.1.0',
     endpoints: {
-      // Domain-specific endpoints (v2)
       health: {
         upload: '/api/health/upload',
         records: '/api/health/records',
@@ -61,13 +56,7 @@ app.get('/', (c) => {
         upload: '/api/finance/upload',
         records: '/api/finance/records',
       },
-      // Legacy endpoints (v1)
-      legacy: {
-        chat: '/api/chat',
-        upload: '/api/upload',
-        records: '/api/records',
-      },
-      // System endpoints
+      chat: '/api/chat',
       system: {
         health: '/health',
         dbTest: '/db-test',

@@ -6,7 +6,7 @@
 import { Hono } from 'hono';
 import { RecordDataSchema, type RecordData } from '@ai-chart/shared';
 import { createDb } from '@ai-chart/database';
-import { saveFinanceData } from '../../services/health-data';
+import { saveRecordData } from '../../services/record-data';
 
 /**
  * Environment bindings
@@ -51,7 +51,7 @@ financeRecordsRoute.post('/', async (c) => {
     });
 
     const db = createDb(c.env.DB);
-    const { recordId, itemsCount } = await saveFinanceData(
+    const { recordId, itemsCount } = await saveRecordData(
       db,
       financeData,
       userId || 'default-user'

@@ -10,7 +10,8 @@ import {
 } from '@ai-chart/ai-core';
 import { type RecordData } from '@ai-chart/shared';
 import { createDb } from '@ai-chart/database';
-import { saveFinanceData } from '../../services/health-data';
+import { saveRecordData } from '../../services/record-data';
+import { detectFileType } from '../../utils/file';
 
 /**
  * Environment bindings
@@ -18,29 +19,6 @@ import { saveFinanceData } from '../../services/health-data';
 interface Env {
   DB: D1Database;
   GOOGLE_GENERATIVE_AI_API_KEY: string;
-}
-
-/**
- * File type detection utility
- */
-function detectFileType(file: File): 'image' | 'pdf' | 'unknown' {
-  const mimeType = file.type.toLowerCase();
-  const fileName = file.name.toLowerCase();
-  const extension = fileName.split('.').pop();
-
-  if (mimeType.startsWith('image/')) {
-    return 'image';
-  }
-
-  if (mimeType === 'application/pdf' || extension === 'pdf') {
-    return 'pdf';
-  }
-
-  if (['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(extension || '')) {
-    return 'image';
-  }
-
-  return 'unknown';
 }
 
 /**
@@ -101,7 +79,7 @@ financeUploadRoute.post('/', async (c) => {
     });
 
     const db = createDb(c.env.DB);
-    const { recordId, itemsCount } = await saveFinanceData(
+    const { recordId, itemsCount } = await saveRecordData(
       db,
       financeData,
       userId || 'default-user'
