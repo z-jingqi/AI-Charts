@@ -13,7 +13,8 @@ Build a **Personal Data Intelligence Dashboard** that evolves from a traditional
 *   **UI Components**: shadcn/ui (Radix UI) + Lucide Icons
 *   **State Management**: React Query (Server state) + React Context (Local/Global UI state)
 *   **Routing**: TanStack Router
-*   **Visualization**: Recharts
+*   **Visualization**: Recharts + @json-render/react (Generative UI)
+*   **Markdown**: streamdown (for streaming markdown)
 *   **Forms**: React Hook Form + Zod
 
 ## 3. Layout Architecture
@@ -63,15 +64,15 @@ Build a **Personal Data Intelligence Dashboard** that evolves from a traditional
     - [x] Mobile: `Drawer` component from shadcn/ui. (Note: Used Sheet/Drawer pattern)
 
 ### Phase 3: The Chat Interface
-- [ ] **Message Bubble Component**
-    - [ ] User message styles.
-    - [ ] AI message styles (Markdown support).
+- [x] **Message Bubble Component**
+    - [x] User message styles.
+    - [x] AI message styles (Markdown support using `streamdown`).
     - [ ] "Tool Call" indicators (e.g., "Analyzing PDF...", "Generating Chart...").
 - [ ] **Artifact Cards (Mini-Canvas)**
     - [ ] Create UI for "Charts", "Forms" when they appear *inside* the chat stream (mobile thumbnail view).
-- [ ] **Input Area**
-    - [ ] Auto-expanding text area.
-    - [ ] File upload button (handle standard HTML5 file input).
+- [x] **Input Area**
+    - [x] Auto-expanding text area.
+    - [x] File upload button (handle standard HTML5 file input).
 
 ### Phase 4: Dynamic Canvas Content
 - [ ] **Chart Renderer**
