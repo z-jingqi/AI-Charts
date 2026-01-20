@@ -1,15 +1,10 @@
 import * as React from "react"
 import { MessageBubble } from "./message-bubble"
 import { ScrollArea } from "@/components/ui/scroll-area"
-
-interface Message {
-  id: string
-  role: "user" | "assistant"
-  content: string
-}
+import type { UIMessage } from "ai"
 
 interface MessageListProps {
-  messages: Message[]
+  messages: UIMessage[]
   isStreaming?: boolean
 }
 
@@ -43,8 +38,7 @@ export function MessageList({ messages, isStreaming }: MessageListProps) {
           messages.map((m, index) => (
             <MessageBubble 
               key={m.id} 
-              role={m.role} 
-              content={m.content} 
+              message={m} 
               isStreaming={isStreaming && index === messages.length - 1 && m.role === "assistant"}
             />
           ))

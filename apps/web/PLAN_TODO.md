@@ -67,6 +67,7 @@ Build a **Personal Data Intelligence Dashboard** that evolves from a traditional
 - [x] **Message Bubble Component**
     - [x] User message styles.
     - [x] AI message styles (Markdown support using `streamdown`).
+    - [x] SRP Refactor: Separate message parts (Text, Reasoning, Tool).
     - [ ] "Tool Call" indicators (e.g., "Analyzing PDF...", "Generating Chart...").
 - [ ] **Artifact Cards (Mini-Canvas)**
     - [ ] Create UI for "Charts", "Forms" when they appear *inside* the chat stream (mobile thumbnail view).
