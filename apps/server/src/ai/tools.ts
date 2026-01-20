@@ -243,5 +243,34 @@ export function getTools(db: DrizzleD1Database<typeof schema>) {
         }
       },
     }),
+
+    /**
+     * Render a UI component on the dynamic canvas
+     */
+    render_ui: tool({
+      description:
+        'Render a UI component on the dynamic canvas. Use this to display charts, forms, or detailed data summaries to the user.',
+      inputSchema: z.object({
+        component: z
+          .enum(['MetricCard', 'TrendChart', 'RecordForm'])
+          .describe('The name of the component to render'),
+        contentType: z
+          .enum(['chart', 'form', 'pdf'])
+          .describe('The type of content being rendered'),
+        props: z.any().describe('The props for the component. \n' +
+          '- MetricCard: { label, value, unit?, trend?, description? }\n' +
+          '- TrendChart: { title, type: "line"|"bar", data: { name, value }[] }\n' +
+          '- RecordForm: { initialData: { id, title, date, metrics: { key, name, value, unit? }[] } }'
+        ),
+      }),
+      execute: async ({ component, props, contentType }) => {
+        return {
+          render: true,
+          component,
+          props,
+          contentType,
+        };
+      },
+    }),
   };
 }

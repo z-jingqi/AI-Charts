@@ -5,7 +5,11 @@
 
 import { Hono } from 'hono';
 import { streamText } from 'ai';
-import { getReasoningModel } from '@ai-chart/ai-core';
+import { 
+  getReasoningModel, 
+  extractDataFromImage, 
+  extractDataFromPDF 
+} from '@ai-chart/ai-core';
 import { createDb } from '@ai-chart/database';
 import { getTools } from '../ai/tools';
 
@@ -14,7 +18,15 @@ import { getTools } from '../ai/tools';
  */
 interface Env {
   DB: D1Database;
-  GOOGLE_GENERATIVE_AI_API_KEY: string;
+  DEFAULT_PROVIDER?: string;
+  GOOGLE_GENERATIVE_AI_API_KEY?: string;
+  OPENAI_API_KEY?: string;
+  ANTHROPIC_API_KEY?: string;
+  DEEPSEEK_API_KEY?: string;
+  OPENROUTER_API_KEY?: string;
+  CLOUDFLARE_ACCOUNT_ID?: string;
+  CLOUDFLARE_API_KEY?: string;
+  AI?: any;
 }
 
 /**
@@ -22,7 +34,8 @@ interface Env {
  */
 interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
-  content: string;
+  content: string | any[];
+  attachments?: any[]; 
 }
 
 /**
@@ -56,8 +69,14 @@ Available tools:
 - query_records: Get detailed health records within a date range
 - get_metric_trend: Track how a specific metric changes over time
 - get_latest_records: Get the most recent health records summary
+- render_ui: EXPLICITLY call this to show charts, forms, or data on the Right Canvas.
 
-Use these tools proactively when users ask about their health data.`;
+GENERATIVE UI GUIDELINES:
+- When a user uploads an image or PDF (passed as context), analyze its content.
+- If it's a health record (blood test, report, etc.), call render_ui with component: "RecordForm" and the extracted metrics so the user can review and save.
+- When a user asks for a chart or trend, first use get_metric_trend to get data, THEN call render_ui with component: "TrendChart" and the formatted data.
+- Use MetricCard for quick single-value summaries.
+- The Right Canvas is your primary way to present complex information. Use it!`;
 
 /**
  * Create chat route
@@ -102,9 +121,31 @@ chatRoute.post('/', async (c) => {
     const result = streamText({
       model,
       system: SYSTEM_PROMPT,
-      messages: body.messages,
+      messages: body.messages.map(msg => {
+        // If content is already an array (new format), use it as is
+        if (Array.isArray(msg.content)) {
+          return { role: msg.role, content: msg.content };
+        }
+        
+        // Fallback for older format or if attachments are provided separately
+        if (msg.attachments && msg.attachments.length > 0) {
+          return {
+            role: msg.role,
+            content: [
+              { type: 'text', text: msg.content },
+              ...msg.attachments.map(att => ({
+                type: 'image',
+                image: att.url,
+              }))
+            ]
+          };
+        }
+
+        return { role: msg.role, content: msg.content };
+      }) as any,
       tools,
-    });
+      experimental_maxSteps: 5,
+    } as any);
 
     // Return streaming response
     return result.toTextStreamResponse();

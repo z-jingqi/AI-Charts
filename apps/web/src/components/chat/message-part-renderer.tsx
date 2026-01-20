@@ -2,6 +2,7 @@ import type { UIMessage } from "ai"
 import { TextPart } from "./parts/text-part"
 import { ReasoningPart } from "./parts/reasoning-part"
 import { ToolInvocationPart } from "./parts/tool-part"
+import { FilePart } from "@/components/chat/parts/file-part"
 
 type MessagePart = UIMessage["parts"][number]
 
@@ -17,6 +18,10 @@ export function MessagePartRenderer({ part, isStreaming }: MessagePartRendererPr
 
   if (part.type === "reasoning") {
     return <ReasoningPart reasoning={part.text} />
+  }
+
+  if (part.type === "file") {
+    return <FilePart part={part} />
   }
 
   if (part.type === "dynamic-tool" || part.type.startsWith("tool-")) {

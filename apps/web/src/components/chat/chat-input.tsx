@@ -62,7 +62,7 @@ export function ChatInput({
           placeholder={placeholder}
           rows={1}
           maxRows={6}
-          className="w-full bg-transparent border-none focus:ring-0 resize-none py-3 pl-12 pr-12 text-sm max-h-[200px]"
+          className="w-full bg-transparent border-none focus:ring-0 resize-none py-3 pl-12 pr-12 text-sm max-h-[200px] outline-none"
           disabled={disabled}
         />
 

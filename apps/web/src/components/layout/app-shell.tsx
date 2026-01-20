@@ -27,6 +27,8 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
+import { CanvasRenderer } from "@/components/canvas/canvas-renderer"
+
 interface NavItemProps {
   to: string
   icon: React.ElementType
@@ -150,10 +152,8 @@ export function AppShell() {
                 <div className="flex items-center border-b px-4 py-3 shrink-0">
                   <span className="font-semibold text-sm">Analysis Result</span>
                 </div>
-                <div className="flex-1 overflow-auto p-4">
-                  <div className="flex h-full items-center justify-center text-muted-foreground italic">
-                    Canvas Content (Charts/Forms) will appear here
-                  </div>
+                <div className="flex-1 overflow-auto">
+                  <CanvasRenderer />
                 </div>
               </div>
             </SheetContent>

@@ -22,7 +22,30 @@ function Index() {
           Click the button below to simulate AI generating an insight.
         </p>
         <Button 
-          onClick={() => openCanvas('chart', { title: 'Test Chart' })}
+          onClick={() => openCanvas('chart', [
+            {
+              component: 'MetricCard',
+              props: {
+                label: 'Health Score',
+                value: '92',
+                unit: '/100',
+                trend: 'up'
+              }
+            },
+            {
+              component: 'TrendChart',
+              props: {
+                title: 'Weight Trend',
+                type: 'line',
+                data: [
+                  { name: 'Oct', value: 75 },
+                  { name: 'Nov', value: 73 },
+                  { name: 'Dec', value: 72 },
+                  { name: 'Jan', value: 71 },
+                ]
+              }
+            }
+          ])}
           disabled={isOpen}
         >
           {isOpen ? 'Canvas is Open' : 'Simulate Insight'}

@@ -12,6 +12,7 @@ import healthUploadRoute from './routes/health/upload';
 import healthRecordsRoute from './routes/health/records';
 import financeUploadRoute from './routes/finance/upload';
 import financeRecordsRoute from './routes/finance/records';
+import recordsRoute from './routes/records';
 
 /**
  * Environment bindings for Cloudflare Workers
@@ -38,6 +39,7 @@ app.route('/api/health/upload', healthUploadRoute);
 app.route('/api/health/records', healthRecordsRoute);
 app.route('/api/finance/upload', financeUploadRoute);
 app.route('/api/finance/records', financeRecordsRoute);
+app.route('/api/records', recordsRoute);
 
 // Chat route
 app.route('/api/chat', chatRoute);

@@ -75,21 +75,26 @@ Build a **Personal Data Intelligence Dashboard** that evolves from a traditional
     - [x] Auto-expanding text area.
     - [x] File upload button (handle standard HTML5 file input).
 
-### Phase 4: Dynamic Canvas Content
-- [ ] **Chart Renderer**
-    - [ ] Integrate `recharts`.
-    - [ ] Create a generic `DynamicChart` component that takes `{ type: 'bar', data: [] }` props.
-- [ ] **Form Renderer**
-    - [ ] Integrate `react-hook-form` + `zod`.
-    - [ ] Create a `DynamicForm` that renders fields based on AI-generated schema (Health Record / Finance Record).
+### Phase 4: Dynamic Canvas Content (Generative UI)
+- [x] **Define json-render Catalog**
+    - [x] Create `catalog.tsx` with Zod-based component definitions.
+- [x] **Implement Canvas Components**
+    - [x] `MetricCard`: Single data point summary.
+    - [x] `TrendChart`: Recharts-based line/bar chart.
+    - [x] `RecordForm`: React Hook Form for data editing.
+- [x] **Canvas Renderer**
+    - [x] Create `CanvasRenderer` using `@json-render/react`.
+    - [x] Connect `CanvasContext` data to the renderer.
+- [x] **Interaction Logic**
+    - [x] Click tool card in chat -> Open Canvas with specific data. (Mocked)
+    - [ ] Support "streaming" UI updates from AI.
 
-### Phase 5: Integration (Mock first, then Real)
-- [ ] **Mock AI Service**
-    - [ ] Simulate "Upload File" -> Returns "Parsing" -> Returns "Show Form Intent".
-    - [ ] Simulate "Show me trends" -> Returns "Show Chart Intent".
-- [ ] **Real API Integration**
-    - [ ] Connect `apps/server` endpoints (`/api/chat`, `/api/upload`).
-    - [ ] Handle real-time streaming responses (Vercel AI SDK `useChat`).
+### Phase 5: Integration (The AI Soul) [completed]
+- [x] Real `api/chat` implementation with streaming.
+- [x] Implement `render_ui` tool for generative UI.
+- [x] Handle multi-modal attachments in chat.
+- [x] Implement record saving API from Canvas.
+- [pending] Persistent chat history in D1.
 
 ## 5. Next Immediate Action
 Start **Phase 1: Foundation & Setup** to get the styling and component library ready.
