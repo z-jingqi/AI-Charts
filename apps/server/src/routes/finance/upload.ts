@@ -6,7 +6,6 @@
 import { Hono } from 'hono';
 import {
   extractDataFromImage,
-  extractDataFromPDF,
 } from '@ai-chart/ai-core';
 import { type RecordData } from '@ai-chart/shared';
 import { createDb } from '@ai-chart/database';
@@ -46,12 +45,12 @@ financeUploadRoute.post('/', async (c) => {
     const fileObj = file as File;
     const fileType = detectFileType(fileObj);
 
-    if (!['image', 'pdf'].includes(fileType)) {
+    if (fileType !== 'image') {
       return c.json(
         {
           success: false,
           error: 'Invalid file type',
-          message: 'Only image files (PNG, JPG, WebP) and PDF files are supported',
+          message: 'Only image files (PNG, JPG, WebP) are supported for now',
           receivedType: fileObj.type,
         },
         400
@@ -60,16 +59,9 @@ financeUploadRoute.post('/', async (c) => {
 
     const arrayBuffer = await fileObj.arrayBuffer();
 
-    console.log(`Extracting finance data from ${fileType} file: ${fileObj.name}`);
+    console.log(`Extracting finance data from image file: ${fileObj.name}`);
 
-    let financeData: RecordData;
-    if (fileType === 'pdf') {
-      financeData = await extractDataFromPDF(c.env, arrayBuffer, 'finance', {
-        strategy: 'text', // Finance documents often have structured text
-      });
-    } else {
-      financeData = await extractDataFromImage(c.env, arrayBuffer, 'finance');
-    }
+    const financeData = await extractDataFromImage(c.env, arrayBuffer, 'finance');
 
     console.log('Finance data extraction result:', {
       type: financeData.type,

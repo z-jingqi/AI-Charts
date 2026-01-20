@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "build": "tsc --noEmit"
+    "build": "tsc --noEmit",
+    "db:migrate:local": "wrangler d1 migrations apply ai-chart-db --local"
   },
   "dependencies": {
     "@ai-chart/ai-core": "workspace:*",

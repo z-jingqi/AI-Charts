@@ -92,8 +92,9 @@ Build a **Personal Data Intelligence Dashboard** that evolves from a traditional
 ### Phase 5: Integration (The AI Soul) [completed]
 - [x] Real `api/chat` implementation with streaming.
 - [x] Implement `render_ui` tool for generative UI.
-- [x] Handle multi-modal attachments in chat.
+- [x] Handle multi-modal attachments in chat (Images only).
 - [x] Implement record saving API from Canvas.
+- [pending] PDF support (deferred to future phase due to worker size limits).
 - [pending] Persistent chat history in D1.
 
 ## 5. Next Immediate Action

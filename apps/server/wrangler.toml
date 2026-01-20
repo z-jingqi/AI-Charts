@@ -31,7 +31,8 @@ command = "npm run build"
 [[d1_databases]]
 binding = "DB"
 database_name = "ai-chart-db"
-database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" # Replace with actual database ID after creation
+database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+migrations_dir = "../../packages/database/drizzle"
 
 # Cloudflare Workers AI Binding (optional)
 # Uncomment to use Cloudflare Workers AI models

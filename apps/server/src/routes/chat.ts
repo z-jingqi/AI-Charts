@@ -8,7 +8,6 @@ import { streamText } from 'ai';
 import { 
   getReasoningModel, 
   extractDataFromImage, 
-  extractDataFromPDF 
 } from '@ai-chart/ai-core';
 import { createDb } from '@ai-chart/database';
 import { getTools } from '../ai/tools';
@@ -72,7 +71,7 @@ Available tools:
 - render_ui: EXPLICITLY call this to show charts, forms, or data on the Right Canvas.
 
 GENERATIVE UI GUIDELINES:
-- When a user uploads an image or PDF (passed as context), analyze its content.
+- When a user uploads an image (passed as context), analyze its content.
 - If it's a health record (blood test, report, etc.), call render_ui with component: "RecordForm" and the extracted metrics so the user can review and save.
 - When a user asks for a chart or trend, first use get_metric_trend to get data, THEN call render_ui with component: "TrendChart" and the formatted data.
 - Use MetricCard for quick single-value summaries.

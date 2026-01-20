@@ -26,14 +26,6 @@ export {
   extractDataFromImage,
 } from './extractors/image';
 
-// PDF Data Extraction (domain-agnostic)
-export {
-  extractDataFromPDF,
-  convertPDFToImages,
-  extractTextFromPDF,
-} from './extractors/pdf';
-export type { PDFExtractionStrategy } from './extractors/pdf';
-
 // Chat Engine
 export {
   streamChatResponse,

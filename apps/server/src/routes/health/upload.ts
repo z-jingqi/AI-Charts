@@ -6,7 +6,6 @@
 import { Hono } from 'hono';
 import {
   extractDataFromImage,
-  extractDataFromPDF,
 } from '@ai-chart/ai-core';
 import { type RecordData } from '@ai-chart/shared';
 import { createDb } from '@ai-chart/database';
@@ -46,12 +45,12 @@ healthUploadRoute.post('/', async (c) => {
     const fileObj = file as File;
     const fileType = detectFileType(fileObj);
 
-    if (!['image', 'pdf'].includes(fileType)) {
+    if (fileType !== 'image') {
       return c.json(
         {
           success: false,
           error: 'Invalid file type',
-          message: 'Only image files (PNG, JPG, WebP) and PDF files are supported',
+          message: 'Only image files (PNG, JPG, WebP) are supported for now',
           receivedType: fileObj.type,
         },
         400
@@ -60,16 +59,9 @@ healthUploadRoute.post('/', async (c) => {
 
     const arrayBuffer = await fileObj.arrayBuffer();
 
-    console.log(`Extracting health data from ${fileType} file: ${fileObj.name}`);
+    console.log(`Extracting health data from image file: ${fileObj.name}`);
 
-    let healthData: RecordData;
-    if (fileType === 'pdf') {
-      healthData = await extractDataFromPDF(c.env, arrayBuffer, 'health', {
-        strategy: 'vision',
-      });
-    } else {
-      healthData = await extractDataFromImage(c.env, arrayBuffer, 'health');
-    }
+    const healthData = await extractDataFromImage(c.env, arrayBuffer, 'health');
 
     console.log('Health data extraction result:', {
       type: healthData.type,
