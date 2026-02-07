@@ -5,7 +5,6 @@
 
 import { Hono } from 'hono';
 import { extractDataFromImage } from '@ai-chart/ai-core';
-import { type RecordData } from '@ai-chart/shared';
 import { createDb } from '@ai-chart/database';
 import { saveRecordData } from '../../services/record-data';
 import { detectFileType } from '../../utils/file';

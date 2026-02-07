@@ -4,7 +4,6 @@
  */
 
 import { streamText } from 'ai';
-import type { StreamTextResult } from 'ai';
 import { getReasoningModel } from './registry';
 import type { AIEnvironment } from './config';
 

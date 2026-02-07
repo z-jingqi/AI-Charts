@@ -63,7 +63,7 @@ function getModelInstance(
   const config = getAIConfig(env);
 
   switch (provider) {
-    case 'google':
+    case 'google': {
       if (!config.google.apiKey) {
         throw new Error('Google API key not configured');
       }
@@ -71,8 +71,9 @@ function getModelInstance(
         apiKey: config.google.apiKey,
       });
       return google(modelId);
+    }
 
-    case 'openai':
+    case 'openai': {
       if (!config.openai.apiKey) {
         throw new Error('OpenAI API key not configured');
       }
@@ -80,8 +81,9 @@ function getModelInstance(
         apiKey: config.openai.apiKey,
       });
       return openai(modelId);
+    }
 
-    case 'anthropic':
+    case 'anthropic': {
       if (!config.anthropic.apiKey) {
         throw new Error('Anthropic API key not configured');
       }
@@ -89,8 +91,9 @@ function getModelInstance(
         apiKey: config.anthropic.apiKey,
       });
       return anthropic(modelId);
+    }
 
-    case 'deepseek':
+    case 'deepseek': {
       if (!config.deepseek.apiKey) {
         throw new Error('DeepSeek API key not configured');
       }
@@ -100,8 +103,9 @@ function getModelInstance(
         baseURL: config.deepseek.baseURL,
       });
       return deepseek(modelId);
+    }
 
-    case 'openrouter':
+    case 'openrouter': {
       if (!config.openrouter.apiKey) {
         throw new Error('OpenRouter API key not configured');
       }
@@ -109,13 +113,15 @@ function getModelInstance(
         apiKey: config.openrouter.apiKey,
       });
       return openrouter(modelId);
+    }
 
-    case 'cloudflare':
+    case 'cloudflare': {
       if (!options?.binding) {
         throw new Error('Cloudflare Workers AI binding is required. Pass the AI binding from env.');
       }
       const workersai = createWorkersAI({ binding: options.binding });
       return workersai(modelId);
+    }
 
     default:
       throw new Error(`Unsupported provider: ${provider}`);

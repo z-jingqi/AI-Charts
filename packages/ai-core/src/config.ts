@@ -68,12 +68,19 @@ export function getAIConfig(env: AIEnvironment): AIConfig {
     defaultProvider = env.DEFAULT_PROVIDER as ModelProvider;
   } else {
     // Auto-detect first configured provider
-    if (env.GOOGLE_GENERATIVE_AI_API_KEY) defaultProvider = 'google';
-    else if (env.OPENAI_API_KEY) defaultProvider = 'openai';
-    else if (env.ANTHROPIC_API_KEY) defaultProvider = 'anthropic';
-    else if (env.DEEPSEEK_API_KEY) defaultProvider = 'deepseek';
-    else if (env.OPENROUTER_API_KEY) defaultProvider = 'openrouter';
-    else if (env.CLOUDFLARE_ACCOUNT_ID && env.CLOUDFLARE_API_KEY) defaultProvider = 'cloudflare';
+    if (env.GOOGLE_GENERATIVE_AI_API_KEY) {
+      defaultProvider = 'google';
+    } else if (env.OPENAI_API_KEY) {
+      defaultProvider = 'openai';
+    } else if (env.ANTHROPIC_API_KEY) {
+      defaultProvider = 'anthropic';
+    } else if (env.DEEPSEEK_API_KEY) {
+      defaultProvider = 'deepseek';
+    } else if (env.OPENROUTER_API_KEY) {
+      defaultProvider = 'openrouter';
+    } else if (env.CLOUDFLARE_ACCOUNT_ID && env.CLOUDFLARE_API_KEY) {
+      defaultProvider = 'cloudflare';
+    }
   }
 
   return {
