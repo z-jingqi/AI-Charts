@@ -1,8 +1,8 @@
-import { Streamdown } from "streamdown"
+import { Streamdown } from 'streamdown';
 
 interface TextPartProps {
-  text: string
-  isStreaming?: boolean
+  text: string;
+  isStreaming?: boolean;
 }
 
 export function TextPart({ text, isStreaming }: TextPartProps) {
@@ -13,5 +13,5 @@ export function TextPart({ text, isStreaming }: TextPartProps) {
         <span className="inline-block w-1.5 h-4 ml-1 bg-primary/50 animate-pulse align-middle" />
       )}
     </div>
-  )
+  );
 }

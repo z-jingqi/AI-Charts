@@ -1,22 +1,21 @@
-
 interface FilePartProps {
   part: {
     type: 'file';
     url: string;
     filename?: string;
     mediaType: string;
-  }
+  };
 }
 
 export function FilePart({ part }: FilePartProps) {
-  const isImage = part.mediaType.startsWith('image/')
+  const isImage = part.mediaType.startsWith('image/');
 
   return (
     <div className="relative group rounded-lg overflow-hidden border bg-muted/50 max-w-[300px] my-2">
       {isImage ? (
-        <img 
-          src={part.url} 
-          alt={part.filename || 'Attachment'} 
+        <img
+          src={part.url}
+          alt={part.filename || 'Attachment'}
           className="max-h-60 w-auto object-contain mx-auto"
         />
       ) : (
@@ -31,5 +30,5 @@ export function FilePart({ part }: FilePartProps) {
         </div>
       )}
     </div>
-  )
+  );
 }

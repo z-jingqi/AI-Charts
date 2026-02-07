@@ -22,7 +22,7 @@ export const records = sqliteTable(
     index('idx_records_user_id').on(table.userId),
     index('idx_records_type').on(table.type),
     index('idx_records_date').on(table.date),
-  ]
+  ],
 );
 
 /**
@@ -55,5 +55,5 @@ export const metrics = sqliteTable(
     index('idx_metrics_key').on(table.key),
     index('idx_metrics_category_tag').on(table.categoryTag),
     index('idx_metrics_parent_key').on(table.parentKey),
-  ]
+  ],
 );

@@ -14,7 +14,10 @@ import type { LanguageModel } from 'ai';
 /**
  * Provider-specific default model configurations
  */
-const DEFAULT_MODELS: Record<ModelProvider, { vision: string; reasoning: string; advanced: string }> = {
+const DEFAULT_MODELS: Record<
+  ModelProvider,
+  { vision: string; reasoning: string; advanced: string }
+> = {
   google: {
     vision: 'gemini-2.5-flash',
     reasoning: 'gemini-2.5-flash',
@@ -54,7 +57,7 @@ function getModelInstance(
   provider: ModelProvider,
   modelId: string,
   env: AIEnvironment,
-  options?: { binding?: any }
+  options?: { binding?: any },
 ): LanguageModel {
   // Validate configuration
   const config = getAIConfig(env);
@@ -109,9 +112,7 @@ function getModelInstance(
 
     case 'cloudflare':
       if (!options?.binding) {
-        throw new Error(
-          'Cloudflare Workers AI binding is required. Pass the AI binding from env.'
-        );
+        throw new Error('Cloudflare Workers AI binding is required. Pass the AI binding from env.');
       }
       const workersai = createWorkersAI({ binding: options.binding });
       return workersai(modelId);
@@ -133,7 +134,7 @@ export function getVisionModel(
   env: AIEnvironment,
   modelId?: string,
   provider?: ModelProvider,
-  options?: { binding?: any }
+  options?: { binding?: any },
 ): LanguageModel {
   const config = getAIConfig(env);
   const selectedProvider = provider || config.defaultProvider;
@@ -153,7 +154,7 @@ export function getReasoningModel(
   env: AIEnvironment,
   modelId?: string,
   provider?: ModelProvider,
-  options?: { binding?: any }
+  options?: { binding?: any },
 ): LanguageModel {
   const config = getAIConfig(env);
   const selectedProvider = provider || config.defaultProvider;
@@ -173,7 +174,7 @@ export function getAdvancedModel(
   env: AIEnvironment,
   modelId?: string,
   provider?: ModelProvider,
-  options?: { binding?: any }
+  options?: { binding?: any },
 ): LanguageModel {
   const config = getAIConfig(env);
   const selectedProvider = provider || config.defaultProvider;
@@ -193,7 +194,7 @@ export function getCustomModel(
   env: AIEnvironment,
   provider: ModelProvider,
   modelId: string,
-  options?: { binding?: any }
+  options?: { binding?: any },
 ): LanguageModel {
   return getModelInstance(provider, modelId, env, options);
 }

@@ -16,7 +16,7 @@ import { createDb, records, metrics } from '@ai-chart/database';
 export async function saveRecordData(
   db: ReturnType<typeof createDb>,
   recordData: RecordData,
-  userId: string = 'default-user'
+  userId: string = 'default-user',
 ): Promise<{
   recordId: string;
   itemsCount: number;
@@ -54,8 +54,8 @@ export async function saveRecordData(
           displayOrder: item.displayOrder ?? null,
           categoryTag: item.categoryTag || null,
           parentKey: item.parentKey || null,
-        })
-      )
+        }),
+      ),
     );
 
     console.log(`Inserted ${recordData.items.length} ${recordData.type} metrics`);

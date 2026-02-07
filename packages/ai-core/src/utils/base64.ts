@@ -44,10 +44,7 @@ export function base64ToArrayBuffer(base64: string): ArrayBuffer {
  * @param mimeType - MIME type of the image (default: image/jpeg)
  * @returns Data URL string
  */
-export function arrayBufferToDataUrl(
-  buffer: ArrayBuffer,
-  mimeType: string = 'image/jpeg'
-): string {
+export function arrayBufferToDataUrl(buffer: ArrayBuffer, mimeType: string = 'image/jpeg'): string {
   const base64 = arrayBufferToBase64(buffer);
   return `data:${mimeType};base64,${base64}`;
 }

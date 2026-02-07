@@ -5,10 +5,7 @@
 
 import { Hono } from 'hono';
 import { streamText } from 'ai';
-import { 
-  getReasoningModel, 
-  extractDataFromImage, 
-} from '@ai-chart/ai-core';
+import { getReasoningModel } from '@ai-chart/ai-core';
 import { createDb } from '@ai-chart/database';
 import { getTools } from '../ai/tools';
 
@@ -34,7 +31,7 @@ interface Env {
 interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
   content: string | any[];
-  attachments?: any[]; 
+  attachments?: any[];
 }
 
 /**
@@ -93,7 +90,7 @@ chatRoute.post('/', async (c) => {
           error: 'Invalid request',
           message: 'messages array is required',
         },
-        400
+        400,
       );
     }
 
@@ -103,7 +100,7 @@ chatRoute.post('/', async (c) => {
           error: 'Invalid request',
           message: 'messages array cannot be empty',
         },
-        400
+        400,
       );
     }
 
@@ -120,23 +117,23 @@ chatRoute.post('/', async (c) => {
     const result = streamText({
       model,
       system: SYSTEM_PROMPT,
-      messages: body.messages.map(msg => {
+      messages: body.messages.map((msg) => {
         // If content is already an array (new format), use it as is
         if (Array.isArray(msg.content)) {
           return { role: msg.role, content: msg.content };
         }
-        
+
         // Fallback for older format or if attachments are provided separately
         if (msg.attachments && msg.attachments.length > 0) {
           return {
             role: msg.role,
             content: [
               { type: 'text', text: msg.content },
-              ...msg.attachments.map(att => ({
+              ...msg.attachments.map((att) => ({
                 type: 'image',
                 image: att.url,
-              }))
-            ]
+              })),
+            ],
           };
         }
 
@@ -154,12 +151,9 @@ chatRoute.post('/', async (c) => {
     return c.json(
       {
         error: 'Internal server error',
-        message:
-          error instanceof Error
-            ? error.message
-            : 'Failed to process chat request',
+        message: error instanceof Error ? error.message : 'Failed to process chat request',
       },
-      500
+      500,
     );
   }
 });

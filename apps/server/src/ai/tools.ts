@@ -23,17 +23,10 @@ export function getTools(db: DrizzleD1Database<typeof schema>) {
       description:
         'Query health or finance records within a date range. Returns records with their associated metrics. Use this to get detailed health data for analysis.',
       inputSchema: z.object({
-        startDate: z
-          .string()
-          .describe('Start date in ISO format (YYYY-MM-DD)'),
+        startDate: z.string().describe('Start date in ISO format (YYYY-MM-DD)'),
         endDate: z.string().describe('End date in ISO format (YYYY-MM-DD)'),
-        type: z
-          .enum(['health', 'finance'])
-          .describe('Type of records to query'),
-        userId: z
-          .string()
-          .optional()
-          .describe('User ID to filter by (optional)'),
+        type: z.enum(['health', 'finance']).describe('Type of records to query'),
+        userId: z.string().optional().describe('User ID to filter by (optional)'),
       }),
       execute: async ({ startDate, endDate, type, userId }) => {
         try {
@@ -71,7 +64,7 @@ export function getTools(db: DrizzleD1Database<typeof schema>) {
                 ...record,
                 metrics: recordMetrics,
               };
-            })
+            }),
           );
 
           return {
@@ -82,8 +75,7 @@ export function getTools(db: DrizzleD1Database<typeof schema>) {
         } catch (error) {
           return {
             success: false,
-            error:
-              error instanceof Error ? error.message : 'Failed to query records',
+            error: error instanceof Error ? error.message : 'Failed to query records',
           };
         }
       },
@@ -98,17 +90,10 @@ export function getTools(db: DrizzleD1Database<typeof schema>) {
       inputSchema: z.object({
         metricKey: z
           .string()
-          .describe(
-            'The metric name to track (e.g., "WBC", "Cholesterol", "ALT")'
-          ),
-        startDate: z
-          .string()
-          .describe('Start date in ISO format (YYYY-MM-DD)'),
+          .describe('The metric name to track (e.g., "WBC", "Cholesterol", "ALT")'),
+        startDate: z.string().describe('Start date in ISO format (YYYY-MM-DD)'),
         endDate: z.string().describe('End date in ISO format (YYYY-MM-DD)'),
-        userId: z
-          .string()
-          .optional()
-          .describe('User ID to filter by (optional)'),
+        userId: z.string().optional().describe('User ID to filter by (optional)'),
       }),
       execute: async ({ metricKey, startDate, endDate, userId }) => {
         try {
@@ -131,8 +116,8 @@ export function getTools(db: DrizzleD1Database<typeof schema>) {
                 eq(metrics.key, metricKey),
                 gte(records.date, startTimestamp),
                 lte(records.date, endTimestamp),
-                userId ? eq(records.userId, userId) : sql`1=1`
-              )
+                userId ? eq(records.userId, userId) : sql`1=1`,
+              ),
             )
             .orderBy(records.date);
 
@@ -150,8 +135,7 @@ export function getTools(db: DrizzleD1Database<typeof schema>) {
 
           // Calculate trend statistics
           const values = results.map((r) => r.value);
-          const average =
-            values.reduce((sum, val) => sum + val, 0) / values.length;
+          const average = values.reduce((sum, val) => sum + val, 0) / values.length;
           const min = Math.min(...values);
           const max = Math.max(...values);
 
@@ -176,10 +160,7 @@ export function getTools(db: DrizzleD1Database<typeof schema>) {
         } catch (error) {
           return {
             success: false,
-            error:
-              error instanceof Error
-                ? error.message
-                : 'Failed to get metric trend',
+            error: error instanceof Error ? error.message : 'Failed to get metric trend',
           };
         }
       },
@@ -192,19 +173,9 @@ export function getTools(db: DrizzleD1Database<typeof schema>) {
       description:
         'Get the most recent health or finance records. Returns a summary of the latest data.',
       inputSchema: z.object({
-        type: z
-          .enum(['health', 'finance'])
-          .describe('Type of records to query'),
-        limit: z
-          .number()
-          .min(1)
-          .max(10)
-          .default(5)
-          .describe('Number of records to return (1-10)'),
-        userId: z
-          .string()
-          .optional()
-          .describe('User ID to filter by (optional)'),
+        type: z.enum(['health', 'finance']).describe('Type of records to query'),
+        limit: z.number().min(1).max(10).default(5).describe('Number of records to return (1-10)'),
+        userId: z.string().optional().describe('User ID to filter by (optional)'),
       }),
       execute: async ({ type, limit, userId }) => {
         try {
@@ -235,10 +206,7 @@ export function getTools(db: DrizzleD1Database<typeof schema>) {
         } catch (error) {
           return {
             success: false,
-            error:
-              error instanceof Error
-                ? error.message
-                : 'Failed to get latest records',
+            error: error instanceof Error ? error.message : 'Failed to get latest records',
           };
         }
       },
@@ -257,11 +225,14 @@ export function getTools(db: DrizzleD1Database<typeof schema>) {
         contentType: z
           .enum(['chart', 'form', 'pdf'])
           .describe('The type of content being rendered'),
-        props: z.any().describe('The props for the component. \n' +
-          '- MetricCard: { label, value, unit?, trend?, description? }\n' +
-          '- TrendChart: { title, type: "line"|"bar", data: { name, value }[] }\n' +
-          '- RecordForm: { initialData: { id, title, date, metrics: { key, name, value, unit? }[] } }'
-        ),
+        props: z
+          .any()
+          .describe(
+            'The props for the component. \n' +
+              '- MetricCard: { label, value, unit?, trend?, description? }\n' +
+              '- TrendChart: { title, type: "line"|"bar", data: { name, value }[] }\n' +
+              '- RecordForm: { initialData: { id, title, date, metrics: { key, name, value, unit? }[] } }',
+          ),
       }),
       execute: async ({ component, props, contentType }) => {
         return {

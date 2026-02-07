@@ -3,7 +3,7 @@
  * AI functionality using Vercel AI SDK with multi-provider support
  */
 
-export const aiCoreVersion = "0.0.1";
+export const aiCoreVersion = '0.0.1';
 
 // Configuration
 export { getAIConfig, isProviderConfigured } from './config';
@@ -14,17 +14,10 @@ export { getDomainConfig, DOMAIN_CONFIGS } from './config/domains';
 export type { DataDomain, DomainConfig } from './config/domains';
 
 // Model Registry
-export {
-  getVisionModel,
-  getReasoningModel,
-  getAdvancedModel,
-  getCustomModel,
-} from './registry';
+export { getVisionModel, getReasoningModel, getAdvancedModel, getCustomModel } from './registry';
 
 // Image Data Extraction (domain-agnostic)
-export {
-  extractDataFromImage,
-} from './extractors/image';
+export { extractDataFromImage } from './extractors/image';
 
 // Chat Engine
 export {
@@ -36,8 +29,4 @@ export {
 export type { ChatMessage } from './chat';
 
 // Utilities (Cloudflare Workers compatible)
-export {
-  arrayBufferToBase64,
-  base64ToArrayBuffer,
-  arrayBufferToDataUrl,
-} from './utils/base64';
+export { arrayBufferToBase64, base64ToArrayBuffer, arrayBufferToDataUrl } from './utils/base64';

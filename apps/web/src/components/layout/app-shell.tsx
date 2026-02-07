@@ -1,65 +1,50 @@
-import * as React from "react"
-import { Link, Outlet, useLocation } from "@tanstack/react-router"
-import { 
-  LayoutDashboard, 
-  MessageSquare, 
-  Settings, 
-  Menu,
-  Plus,
-  X
-} from "lucide-react"
+import * as React from 'react';
+import { Link, Outlet, useLocation } from '@tanstack/react-router';
+import { LayoutDashboard, MessageSquare, Settings, Menu, Plus, X } from 'lucide-react';
 
-import { useIsMobile } from "@/hooks/use-mobile"
-import { useCanvas } from "@/context/canvas-context"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { 
-  Sheet, 
-  SheetContent, 
-  SheetTrigger 
-} from "@/components/ui/sheet"
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useIsMobile } from '@/hooks/use-mobile';
+import { useCanvas } from '@/context/canvas-context';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-import { CanvasRenderer } from "@/components/canvas/canvas-renderer"
+import { CanvasRenderer } from '@/components/canvas/canvas-renderer';
 
 interface NavItemProps {
-  to: string
-  icon: React.ElementType
-  label: string
-  collapsed?: boolean
+  to: string;
+  icon: React.ElementType;
+  label: string;
+  collapsed?: boolean;
 }
 
 function NavItem({ to, icon: Icon, label, collapsed }: NavItemProps) {
-  const location = useLocation()
-  const isActive = location.pathname === to
+  const location = useLocation();
+  const isActive = location.pathname === to;
 
   return (
     <Link
       to={to}
       className={cn(
-        "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary",
-        isActive ? "bg-secondary text-primary" : "text-muted-foreground",
-        collapsed && "justify-center px-2"
+        'flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary',
+        isActive ? 'bg-secondary text-primary' : 'text-muted-foreground',
+        collapsed && 'justify-center px-2',
       )}
     >
       <Icon className="h-4 w-4" />
       {!collapsed && <span className="text-sm font-medium">{label}</span>}
     </Link>
-  )
+  );
 }
 
 function SidebarContent({ collapsed }: { collapsed?: boolean }) {
   return (
     <div className="flex h-full flex-col gap-4 py-4">
-      <div className={cn("px-4 py-2", collapsed && "px-2 text-center")}>
-        <h2 className={cn("text-lg font-semibold tracking-tight", collapsed && "sr-only")}>
+      <div className={cn('px-4 py-2', collapsed && 'px-2 text-center')}>
+        <h2 className={cn('text-lg font-semibold tracking-tight', collapsed && 'sr-only')}>
           AI-Chart
         </h2>
         {collapsed && <span className="text-xl font-bold">A</span>}
@@ -73,32 +58,39 @@ function SidebarContent({ collapsed }: { collapsed?: boolean }) {
       <Separator />
       <div className="flex-1 px-2">
         <div className="space-y-1">
-          <p className={cn("px-2 text-xs font-semibold uppercase text-muted-foreground mb-2", collapsed && "sr-only")}>
+          <p
+            className={cn(
+              'px-2 text-xs font-semibold uppercase text-muted-foreground mb-2',
+              collapsed && 'sr-only',
+            )}
+          >
             History
           </p>
           {/* Mock history items */}
           <ScrollArea className="h-[300px]">
-             {!collapsed && (
-               <div className="space-y-1">
-                 {[1, 2, 3].map((i) => (
-                   <Link
-                     key={i}
-                     to="/chat/$chatId"
-                     params={{ chatId: `session-${i}` }}
-                     className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-secondary hover:text-primary truncate"
-                   >
-                     Health Record Analysis {i}
-                   </Link>
-                 ))}
-               </div>
-             )}
+            {!collapsed && (
+              <div className="space-y-1">
+                {[1, 2, 3].map((i) => (
+                  <Link
+                    key={i}
+                    to="/chat/$chatId"
+                    params={{ chatId: `session-${i}` }}
+                    className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-secondary hover:text-primary truncate"
+                  >
+                    Health Record Analysis {i}
+                  </Link>
+                ))}
+              </div>
+            )}
           </ScrollArea>
         </div>
       </div>
       <Separator />
       <div className="px-2">
         <NavItem to="/settings" icon={Settings} label="Settings" collapsed={collapsed} />
-        <div className={cn("mt-4 flex items-center gap-3 px-3", collapsed && "justify-center px-0")}>
+        <div
+          className={cn('mt-4 flex items-center gap-3 px-3', collapsed && 'justify-center px-0')}
+        >
           <Avatar className="h-8 w-8">
             <AvatarImage src="" />
             <AvatarFallback>JD</AvatarFallback>
@@ -112,13 +104,13 @@ function SidebarContent({ collapsed }: { collapsed?: boolean }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export function AppShell() {
-  const isMobile = useIsMobile()
-  const { isOpen, closeCanvas } = useCanvas()
-  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false)
+  const isMobile = useIsMobile();
+  const { isOpen, closeCanvas } = useCanvas();
+  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
 
   if (isMobile) {
     return (
@@ -144,7 +136,7 @@ export function AppShell() {
         {/* Main Content */}
         <main className="relative flex-1 overflow-hidden">
           <Outlet />
-          
+
           {/* Mobile Canvas Overlay (using Sheet for Bottom Drawer) */}
           <Sheet open={isOpen} onOpenChange={(open) => !open && closeCanvas()}>
             <SheetContent side="bottom" className="h-[80vh] p-0">
@@ -160,7 +152,7 @@ export function AppShell() {
           </Sheet>
         </main>
       </div>
-    )
+    );
   }
 
   return (
@@ -173,11 +165,11 @@ export function AppShell() {
           maxSize="20%"
           collapsible={true}
           onResize={(size) => {
-            setSidebarCollapsed(size.asPercentage === 0)
+            setSidebarCollapsed(size.asPercentage === 0);
           }}
           className={cn(
-            "border-r transition-all duration-300 ease-in-out",
-            sidebarCollapsed && "min-w-[60px]"
+            'border-r transition-all duration-300 ease-in-out',
+            sidebarCollapsed && 'min-w-[60px]',
           )}
         >
           <SidebarContent collapsed={sidebarCollapsed} />
@@ -186,15 +178,21 @@ export function AppShell() {
         <ResizableHandle withHandle />
 
         {/* Center - Main Chat Area */}
-        <ResizablePanel defaultSize={isOpen ? "45%" : "85%"}>
+        <ResizablePanel defaultSize={isOpen ? '45%' : '85%'}>
           <main className="h-full overflow-hidden flex flex-col">
             <header className="h-14 border-b flex items-center px-6 shrink-0 justify-between">
-               <span className="font-medium">Current Session</span>
-               {!isOpen && (
-                 <Button variant="outline" size="sm" onClick={() => {/* Action to open canvas */}}>
-                   View Insights
-                 </Button>
-               )}
+              <span className="font-medium">Current Session</span>
+              {!isOpen && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    /* Action to open canvas */
+                  }}
+                >
+                  View Insights
+                </Button>
+              )}
             </header>
             <div className="flex-1 overflow-hidden relative">
               <Outlet />
@@ -225,5 +223,5 @@ export function AppShell() {
         )}
       </ResizablePanelGroup>
     </div>
-  )
+  );
 }

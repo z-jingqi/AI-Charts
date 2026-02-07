@@ -6,7 +6,13 @@
 /**
  * Supported AI providers
  */
-export type ModelProvider = 'google' | 'openai' | 'anthropic' | 'deepseek' | 'openrouter' | 'cloudflare';
+export type ModelProvider =
+  | 'google'
+  | 'openai'
+  | 'anthropic'
+  | 'deepseek'
+  | 'openrouter'
+  | 'cloudflare';
 
 /**
  * AI Provider Configuration
@@ -99,7 +105,9 @@ export function getAIConfig(env: AIEnvironment): AIConfig {
  * Check if a string is a valid provider
  */
 function isValidProvider(provider: string): boolean {
-  return ['google', 'openai', 'anthropic', 'deepseek', 'openrouter', 'cloudflare'].includes(provider);
+  return ['google', 'openai', 'anthropic', 'deepseek', 'openrouter', 'cloudflare'].includes(
+    provider,
+  );
 }
 
 /**
@@ -107,10 +115,7 @@ function isValidProvider(provider: string): boolean {
  * @param provider - Provider name to check
  * @param env - Environment variables from Cloudflare Workers context
  */
-export function isProviderConfigured(
-  provider: ModelProvider,
-  env: AIEnvironment
-): boolean {
+export function isProviderConfigured(provider: ModelProvider, env: AIEnvironment): boolean {
   try {
     const config = getAIConfig(env);
     if (provider === 'cloudflare') {

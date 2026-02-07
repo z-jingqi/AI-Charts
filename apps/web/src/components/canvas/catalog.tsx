@@ -23,10 +23,14 @@ export const catalog = createCatalog({
         title: z.string().describe('Chart title'),
         type: z.enum(['line', 'bar']).describe('Type of chart'),
         color: z.string().optional().describe('Primary color for the chart'),
-        data: z.array(z.object({
-          name: z.string().describe('X-axis label'),
-          value: z.number().describe('Y-axis value'),
-        })).describe('Data points for the chart'),
+        data: z
+          .array(
+            z.object({
+              name: z.string().describe('X-axis label'),
+              value: z.number().describe('Y-axis value'),
+            }),
+          )
+          .describe('Data points for the chart'),
       }),
     },
     RecordForm: {
@@ -36,12 +40,14 @@ export const catalog = createCatalog({
           id: z.string(),
           title: z.string(),
           date: z.string(),
-          metrics: z.array(z.object({
-            key: z.string(),
-            name: z.string(),
-            value: z.union([z.string(), z.number()]),
-            unit: z.string().optional(),
-          })),
+          metrics: z.array(
+            z.object({
+              key: z.string(),
+              name: z.string(),
+              value: z.union([z.string(), z.number()]),
+              unit: z.string().optional(),
+            }),
+          ),
         }),
       }),
     },
@@ -60,8 +66,8 @@ export const registry: ComponentRegistry = {
   MetricCard: ({ element }) => MetricCard(element.props as any),
   TrendChart: ({ element }) => TrendChart(element.props as any),
   RecordForm: ({ element, onAction }) => (
-    <RecordForm 
-      initialData={element.props.initialData as any} 
+    <RecordForm
+      initialData={element.props.initialData as any}
       onSave={(data) => onAction?.({ name: 'save_record', params: { id: data.id, data } })}
     />
   ),

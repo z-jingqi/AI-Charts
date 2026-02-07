@@ -37,9 +37,10 @@ financeRecordsRoute.post('/', async (c) => {
         {
           success: false,
           error: 'Invalid type',
-          message: 'This endpoint only accepts finance data. Use /api/health/records for health data.',
+          message:
+            'This endpoint only accepts finance data. Use /api/health/records for health data.',
         },
-        400
+        400,
       );
     }
 
@@ -54,7 +55,7 @@ financeRecordsRoute.post('/', async (c) => {
     const { recordId, itemsCount } = await saveRecordData(
       db,
       financeData,
-      userId || 'default-user'
+      userId || 'default-user',
     );
 
     return c.json({
@@ -80,11 +81,14 @@ financeRecordsRoute.post('/', async (c) => {
           message: 'The provided data does not match the required schema',
           details: error.message,
         },
-        400
+        400,
       );
     }
 
-    if (error instanceof Error && (error.message.includes('database') || error.message.includes('D1'))) {
+    if (
+      error instanceof Error &&
+      (error.message.includes('database') || error.message.includes('D1'))
+    ) {
       return c.json(
         {
           success: false,
@@ -92,7 +96,7 @@ financeRecordsRoute.post('/', async (c) => {
           message: 'Failed to save the finance data. Please try again later.',
           details: error.message,
         },
-        500
+        500,
       );
     }
 
@@ -103,7 +107,7 @@ financeRecordsRoute.post('/', async (c) => {
         message: 'An unexpected error occurred while saving your data',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
-      500
+      500,
     );
   }
 });

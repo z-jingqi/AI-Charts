@@ -69,6 +69,7 @@ pnpm build
 ### Deployment
 
 **Frontend (Cloudflare Pages)**:
+
 ```bash
 cd apps/web
 pnpm build
@@ -76,6 +77,7 @@ pnpm build
 ```
 
 **Backend (Cloudflare Workers)**:
+
 ```bash
 cd apps/server
 pnpm deploy

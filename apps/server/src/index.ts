@@ -92,7 +92,7 @@ app.get('/db-test', (c) => {
         message: 'Database connection failed',
         error: error instanceof Error ? error.message : 'Unknown error',
       },
-      500
+      500,
     );
   }
 });

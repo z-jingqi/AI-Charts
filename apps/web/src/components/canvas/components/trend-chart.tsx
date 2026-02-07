@@ -1,15 +1,15 @@
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   BarChart,
-  Bar
+  Bar,
 } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export interface TrendChartProps {
   title: string;
@@ -18,7 +18,7 @@ export interface TrendChartProps {
   color?: string;
 }
 
-export function TrendChart({ title, type, data, color = "#2563eb" }: TrendChartProps) {
+export function TrendChart({ title, type, data, color = '#2563eb' }: TrendChartProps) {
   return (
     <Card className="w-full h-[300px]">
       <CardHeader>
@@ -29,52 +29,42 @@ export function TrendChart({ title, type, data, color = "#2563eb" }: TrendChartP
           {type === 'line' ? (
             <LineChart data={data}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis 
-                dataKey="name" 
-                fontSize={12} 
-                tickLine={false} 
-                axisLine={false} 
-              />
-              <YAxis 
-                fontSize={12} 
-                tickLine={false} 
-                axisLine={false} 
+              <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+              <YAxis
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
                 tickFormatter={(value) => `${value}`}
               />
-              <Tooltip 
-                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+              <Tooltip
+                contentStyle={{
+                  borderRadius: '8px',
+                  border: 'none',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                }}
               />
-              <Line 
-                type="monotone" 
-                dataKey="value" 
-                stroke={color} 
-                strokeWidth={2} 
-                dot={{ r: 4 }} 
-                activeDot={{ r: 6 }} 
+              <Line
+                type="monotone"
+                dataKey="value"
+                stroke={color}
+                strokeWidth={2}
+                dot={{ r: 4 }}
+                activeDot={{ r: 6 }}
               />
             </LineChart>
           ) : (
             <BarChart data={data}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis 
-                dataKey="name" 
-                fontSize={12} 
-                tickLine={false} 
-                axisLine={false} 
+              <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+              <YAxis fontSize={12} tickLine={false} axisLine={false} />
+              <Tooltip
+                contentStyle={{
+                  borderRadius: '8px',
+                  border: 'none',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                }}
               />
-              <YAxis 
-                fontSize={12} 
-                tickLine={false} 
-                axisLine={false} 
-              />
-              <Tooltip 
-                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-              />
-              <Bar 
-                dataKey="value" 
-                fill={color} 
-                radius={[4, 4, 0, 0]} 
-              />
+              <Bar dataKey="value" fill={color} radius={[4, 4, 0, 0]} />
             </BarChart>
           )}
         </ResponsiveContainer>

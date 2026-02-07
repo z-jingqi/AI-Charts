@@ -1,25 +1,25 @@
-import * as React from "react"
-import { MessageBubble } from "./message-bubble"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import type { UIMessage } from "ai"
+import * as React from 'react';
+import { MessageBubble } from './message-bubble';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import type { UIMessage } from 'ai';
 
 interface MessageListProps {
-  messages: UIMessage[]
-  isStreaming?: boolean
+  messages: UIMessage[];
+  isStreaming?: boolean;
 }
 
 export function MessageList({ messages, isStreaming }: MessageListProps) {
-  const scrollRef = React.useRef<HTMLDivElement>(null)
+  const scrollRef = React.useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
     if (scrollRef.current) {
-      const scrollContainer = scrollRef.current.querySelector('[data-radix-scroll-area-viewport]')
+      const scrollContainer = scrollRef.current.querySelector('[data-radix-scroll-area-viewport]');
       if (scrollContainer) {
-        scrollContainer.scrollTop = scrollContainer.scrollHeight
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
       }
     }
-  }, [messages])
+  }, [messages]);
 
   return (
     <ScrollArea ref={scrollRef} className="h-full w-full">
@@ -36,14 +36,14 @@ export function MessageList({ messages, isStreaming }: MessageListProps) {
           </div>
         ) : (
           messages.map((m, index) => (
-            <MessageBubble 
-              key={m.id} 
-              message={m} 
-              isStreaming={isStreaming && index === messages.length - 1 && m.role === "assistant"}
+            <MessageBubble
+              key={m.id}
+              message={m}
+              isStreaming={isStreaming && index === messages.length - 1 && m.role === 'assistant'}
             />
           ))
         )}
       </div>
     </ScrollArea>
-  )
+  );
 }

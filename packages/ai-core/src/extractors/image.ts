@@ -3,12 +3,12 @@
  * Extracts structured data from images using AI (health, finance, etc.)
  */
 
-import { generateText, Output } from "ai";
-import { RecordDataSchema, type RecordData } from "@ai-chart/shared";
-import { getVisionModel } from "../registry";
-import type { AIEnvironment, ModelProvider } from "../config";
-import { arrayBufferToBase64 } from "../utils/base64";
-import { getDomainConfig, type DataDomain } from "../config/domains";
+import { generateText, Output } from 'ai';
+import { RecordDataSchema, type RecordData } from '@ai-chart/shared';
+import { getVisionModel } from '../registry';
+import type { AIEnvironment, ModelProvider } from '../config';
+import { arrayBufferToBase64 } from '../utils/base64';
+import { getDomainConfig, type DataDomain } from '../config/domains';
 
 /**
  * Extract data from an image (domain-agnostic)
@@ -24,16 +24,16 @@ export async function extractDataFromImage(
   imageBuffer: ArrayBuffer | string,
   domain: DataDomain = 'health',
   modelId?: string,
-  provider?: ModelProvider
+  provider?: ModelProvider,
 ): Promise<RecordData> {
   const model = getVisionModel(env, modelId, provider);
   const domainConfig = getDomainConfig(domain);
 
   // Convert ArrayBuffer to base64 URL if needed
   let imageUrl: string;
-  if (typeof imageBuffer === "string") {
+  if (typeof imageBuffer === 'string') {
     // Assume it's already a base64 string or URL
-    imageUrl = imageBuffer.startsWith("data:")
+    imageUrl = imageBuffer.startsWith('data:')
       ? imageBuffer
       : `data:image/jpeg;base64,${imageBuffer}`;
   } else {
@@ -48,18 +48,18 @@ export async function extractDataFromImage(
     output: Output.object({ schema: RecordDataSchema }),
     messages: [
       {
-        role: "system",
+        role: 'system',
         content: domainConfig.imagePrompt,
       },
       {
-        role: "user",
+        role: 'user',
         content: [
           {
-            type: "text",
+            type: 'text',
             text: `Please extract all ${domain} metrics from this document image. Follow the guidelines strictly.`,
           },
           {
-            type: "image",
+            type: 'image',
             image: imageUrl,
           },
         ],

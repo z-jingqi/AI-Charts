@@ -26,11 +26,7 @@ recordsRoute.post('/', async (c) => {
     }
 
     const db = createDb(c.env.DB);
-    const { recordId, itemsCount } = await saveRecordData(
-      db,
-      data,
-      userId || 'default-user'
-    );
+    const { recordId, itemsCount } = await saveRecordData(db, data, userId || 'default-user');
 
     return c.json({
       success: true,
@@ -46,7 +42,7 @@ recordsRoute.post('/', async (c) => {
         error: 'Failed to save record',
         message: error instanceof Error ? error.message : 'Unknown error',
       },
-      500
+      500,
     );
   }
 });

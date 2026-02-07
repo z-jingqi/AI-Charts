@@ -1,8 +1,8 @@
-import { FileText } from "lucide-react"
+import { FileText } from 'lucide-react';
 
 interface ToolInvocationPartProps {
-  toolName: string
-  toolCallId: string
+  toolName: string;
+  toolCallId: string;
 }
 
 export function ToolInvocationPart({ toolName }: ToolInvocationPartProps) {
@@ -16,5 +16,5 @@ export function ToolInvocationPart({ toolName }: ToolInvocationPartProps) {
         <p className="text-[10px] text-muted-foreground">Click to view on Canvas</p>
       </div>
     </div>
-  )
+  );
 }

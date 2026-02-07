@@ -1,7 +1,7 @@
-import { Terminal, ChevronDown } from "lucide-react"
+import { Terminal, ChevronDown } from 'lucide-react';
 
 interface ReasoningPartProps {
-  reasoning: string
+  reasoning: string;
 }
 
 export function ReasoningPart({ reasoning }: ReasoningPartProps) {
@@ -16,5 +16,5 @@ export function ReasoningPart({ reasoning }: ReasoningPartProps) {
         {reasoning}
       </div>
     </details>
-  )
+  );
 }

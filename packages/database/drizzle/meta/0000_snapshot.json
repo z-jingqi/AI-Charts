@@ -95,30 +95,22 @@
       "indexes": {
         "idx_metrics_record_id": {
           "name": "idx_metrics_record_id",
-          "columns": [
-            "record_id"
-          ],
+          "columns": ["record_id"],
           "isUnique": false
         },
         "idx_metrics_key": {
           "name": "idx_metrics_key",
-          "columns": [
-            "key"
-          ],
+          "columns": ["key"],
           "isUnique": false
         },
         "idx_metrics_category_tag": {
           "name": "idx_metrics_category_tag",
-          "columns": [
-            "category_tag"
-          ],
+          "columns": ["category_tag"],
           "isUnique": false
         },
         "idx_metrics_parent_key": {
           "name": "idx_metrics_parent_key",
-          "columns": [
-            "parent_key"
-          ],
+          "columns": ["parent_key"],
           "isUnique": false
         }
       },
@@ -127,12 +119,8 @@
           "name": "metrics_record_id_records_id_fk",
           "tableFrom": "metrics",
           "tableTo": "records",
-          "columnsFrom": [
-            "record_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["record_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -204,23 +192,17 @@
       "indexes": {
         "idx_records_user_id": {
           "name": "idx_records_user_id",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": false
         },
         "idx_records_type": {
           "name": "idx_records_type",
-          "columns": [
-            "type"
-          ],
+          "columns": ["type"],
           "isUnique": false
         },
         "idx_records_date": {
           "name": "idx_records_date",
-          "columns": [
-            "date"
-          ],
+          "columns": ["date"],
           "isUnique": false
         }
       },

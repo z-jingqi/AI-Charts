@@ -50,7 +50,7 @@ When discussing health metrics:
 export function streamChatResponse(
   env: AIEnvironment,
   messages: ChatMessage[],
-  modelId?: string
+  modelId?: string,
 ): ReturnType<typeof streamText> {
   const model = getReasoningModel(env, modelId);
 
@@ -77,7 +77,7 @@ export function streamChatResponse(
 export async function generateChatResponse(
   env: AIEnvironment,
   messages: ChatMessage[],
-  modelId?: string
+  modelId?: string,
 ): Promise<string> {
   const result = await streamChatResponse(env, messages, modelId);
 
@@ -96,10 +96,7 @@ export async function generateChatResponse(
  * @param content - Message content
  * @returns ChatMessage object
  */
-export function createMessage(
-  role: 'user' | 'assistant' | 'system',
-  content: string
-): ChatMessage {
+export function createMessage(role: 'user' | 'assistant' | 'system', content: string): ChatMessage {
   return {
     role,
     content,

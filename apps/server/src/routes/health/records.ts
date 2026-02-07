@@ -37,9 +37,10 @@ healthRecordsRoute.post('/', async (c) => {
         {
           success: false,
           error: 'Invalid type',
-          message: 'This endpoint only accepts health data. Use /api/finance/records for finance data.',
+          message:
+            'This endpoint only accepts health data. Use /api/finance/records for finance data.',
         },
-        400
+        400,
       );
     }
 
@@ -51,11 +52,7 @@ healthRecordsRoute.post('/', async (c) => {
     });
 
     const db = createDb(c.env.DB);
-    const { recordId, itemsCount } = await saveRecordData(
-      db,
-      healthData,
-      userId || 'default-user'
-    );
+    const { recordId, itemsCount } = await saveRecordData(db, healthData, userId || 'default-user');
 
     return c.json({
       success: true,
@@ -80,11 +77,14 @@ healthRecordsRoute.post('/', async (c) => {
           message: 'The provided data does not match the required schema',
           details: error.message,
         },
-        400
+        400,
       );
     }
 
-    if (error instanceof Error && (error.message.includes('database') || error.message.includes('D1'))) {
+    if (
+      error instanceof Error &&
+      (error.message.includes('database') || error.message.includes('D1'))
+    ) {
       return c.json(
         {
           success: false,
@@ -92,7 +92,7 @@ healthRecordsRoute.post('/', async (c) => {
           message: 'Failed to save the health data. Please try again later.',
           details: error.message,
         },
-        500
+        500,
       );
     }
 
@@ -103,7 +103,7 @@ healthRecordsRoute.post('/', async (c) => {
         message: 'An unexpected error occurred while saving your data',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
-      500
+      500,
     );
   }
 });

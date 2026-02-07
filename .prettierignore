@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+.wrangler/
+.turbo/
+
+# Lockfiles
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Generated files
+**/routeTree.gen.ts
+**/drizzle/**/*.sql
+
+# Logs & env
+*.log
+.env*
+.dev.vars

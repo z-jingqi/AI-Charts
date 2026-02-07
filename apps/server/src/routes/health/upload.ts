@@ -4,9 +4,7 @@
  */
 
 import { Hono } from 'hono';
-import {
-  extractDataFromImage,
-} from '@ai-chart/ai-core';
+import { extractDataFromImage } from '@ai-chart/ai-core';
 import { type RecordData } from '@ai-chart/shared';
 import { createDb } from '@ai-chart/database';
 import { saveRecordData } from '../../services/record-data';
@@ -38,7 +36,7 @@ healthUploadRoute.post('/', async (c) => {
           error: 'No file uploaded',
           message: 'Please provide a file in the "file" field',
         },
-        400
+        400,
       );
     }
 
@@ -53,7 +51,7 @@ healthUploadRoute.post('/', async (c) => {
           message: 'Only image files (PNG, JPG, WebP) are supported for now',
           receivedType: fileObj.type,
         },
-        400
+        400,
       );
     }
 
@@ -71,11 +69,7 @@ healthUploadRoute.post('/', async (c) => {
     });
 
     const db = createDb(c.env.DB);
-    const { recordId, itemsCount } = await saveRecordData(
-      db,
-      healthData,
-      userId || 'default-user'
-    );
+    const { recordId, itemsCount } = await saveRecordData(db, healthData, userId || 'default-user');
 
     return c.json({
       success: true,
@@ -102,7 +96,7 @@ healthUploadRoute.post('/', async (c) => {
               'Failed to extract health data. Please ensure the document is clear and contains medical information.',
             details: error.message,
           },
-          422
+          422,
         );
       }
 
@@ -114,7 +108,7 @@ healthUploadRoute.post('/', async (c) => {
             message: 'Failed to save the extracted data. Please try again later.',
             details: error.message,
           },
-          500
+          500,
         );
       }
     }
@@ -126,7 +120,7 @@ healthUploadRoute.post('/', async (c) => {
         message: 'An unexpected error occurred while processing your request',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
-      500
+      500,
     );
   }
 });

@@ -12,7 +12,7 @@ export const Route = createFileRoute('/chat/$chatId')({
 function ChatPage() {
   const { chatId } = Route.useParams();
   const { openCanvas } = useCanvas();
-  
+
   // Use the new Vercel AI SDK Multi-modal Chat API (ai v4/v6)
   const { messages, sendMessage, status } = useChat({
     id: chatId,
@@ -25,14 +25,12 @@ function ChatPage() {
             const toolInvocation = part.toolInvocation;
             if (toolInvocation.state === 'result' && toolInvocation.toolName === 'render_ui') {
               const { component, props, contentType } = toolInvocation.result;
-              openCanvas(contentType, [
-                { component, props }
-              ]);
+              openCanvas(contentType, [{ component, props }]);
             }
           }
         });
       }
-    }
+    },
   });
 
   const isLoading = status === 'submitted' || status === 'streaming';
@@ -44,9 +42,9 @@ function ChatPage() {
 
   const handleUpload = (files: FileList) => {
     console.log('Uploading files:', files);
-    sendMessage({ 
+    sendMessage({
       text: `Uploaded ${files.length} file(s) for analysis.`,
-      files: files 
+      files: files,
     });
   };
 
@@ -55,15 +53,10 @@ function ChatPage() {
       <div className="flex-1 overflow-hidden">
         <MessageList messages={messages} isStreaming={isLoading} />
       </div>
-      
+
       <div className="w-full max-w-3xl mx-auto">
-        <ChatInput 
-          onSend={handleSend} 
-          onUpload={handleUpload} 
-          disabled={isLoading} 
-        />
+        <ChatInput onSend={handleSend} onUpload={handleUpload} disabled={isLoading} />
       </div>
     </div>
   );
 }
-
