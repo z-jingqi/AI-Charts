@@ -63,11 +63,11 @@ export const catalog = createCatalog({
 });
 
 export const registry: ComponentRegistry = {
-  MetricCard: ({ element }) => MetricCard(element.props as any),
-  TrendChart: ({ element }) => TrendChart(element.props as any),
+  MetricCard: ({ element }) => MetricCard(element.props),
+  TrendChart: ({ element }) => TrendChart(element.props),
   RecordForm: ({ element, onAction }) => (
     <RecordForm
-      initialData={element.props.initialData as any}
+      initialData={element.props.initialData}
       onSave={(data) => onAction?.({ name: 'save_record', params: { id: data.id, data } })}
     />
   ),

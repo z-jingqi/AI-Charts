@@ -4,7 +4,7 @@
  */
 
 import { Hono } from 'hono';
-import { streamText } from 'ai';
+import { streamText, convertToModelMessages, stepCountIs, type UIMessage } from 'ai';
 import { getReasoningModel } from '@ai-chart/ai-core';
 import { createDb } from '@ai-chart/database';
 import { getTools } from '../ai/tools';
@@ -22,23 +22,16 @@ interface Env {
   OPENROUTER_API_KEY?: string;
   CLOUDFLARE_ACCOUNT_ID?: string;
   CLOUDFLARE_API_KEY?: string;
-  AI?: any;
-}
-
-/**
- * Chat message structure
- */
-interface ChatMessage {
-  role: 'user' | 'assistant' | 'system';
-  content: string | any[];
-  attachments?: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  AI?: any; // Cloudflare Workers AI binding — no SDK type available
 }
 
 /**
  * Request body structure
+ * Uses UIMessage from AI SDK — same type the client's DefaultChatTransport sends
  */
 interface ChatRequest {
-  messages: ChatMessage[];
+  messages: UIMessage[];
   userId?: string;
 }
 
@@ -113,38 +106,20 @@ chatRoute.post('/', async (c) => {
     // Get AI model
     const model = getReasoningModel(c.env);
 
+    // Convert UIMessage[] → ModelMessage[] using SDK utility
+    const modelMessages = await convertToModelMessages(body.messages, { tools });
+
     // Stream chat response with tools
     const result = streamText({
       model,
       system: SYSTEM_PROMPT,
-      messages: body.messages.map((msg) => {
-        // If content is already an array (new format), use it as is
-        if (Array.isArray(msg.content)) {
-          return { role: msg.role, content: msg.content };
-        }
-
-        // Fallback for older format or if attachments are provided separately
-        if (msg.attachments && msg.attachments.length > 0) {
-          return {
-            role: msg.role,
-            content: [
-              { type: 'text', text: msg.content },
-              ...msg.attachments.map((att) => ({
-                type: 'image',
-                image: att.url,
-              })),
-            ],
-          };
-        }
-
-        return { role: msg.role, content: msg.content };
-      }) as any,
+      messages: modelMessages,
       tools,
-      experimental_maxSteps: 5,
-    } as any);
+      stopWhen: stepCountIs(5),
+    });
 
-    // Return streaming response
-    return result.toTextStreamResponse();
+    // Return UI message stream (compatible with DefaultChatTransport on the client)
+    return result.toUIMessageStreamResponse();
   } catch (error) {
     console.error('Chat error:', error);
 

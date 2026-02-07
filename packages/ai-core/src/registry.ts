@@ -57,7 +57,7 @@ function getModelInstance(
   provider: ModelProvider,
   modelId: string,
   env: AIEnvironment,
-  options?: { binding?: any },
+  options?: { binding?: unknown },
 ): LanguageModel {
   // Validate configuration
   const config = getAIConfig(env);
@@ -140,7 +140,7 @@ export function getVisionModel(
   env: AIEnvironment,
   modelId?: string,
   provider?: ModelProvider,
-  options?: { binding?: any },
+  options?: { binding?: unknown },
 ): LanguageModel {
   const config = getAIConfig(env);
   const selectedProvider = provider || config.defaultProvider;
@@ -160,7 +160,7 @@ export function getReasoningModel(
   env: AIEnvironment,
   modelId?: string,
   provider?: ModelProvider,
-  options?: { binding?: any },
+  options?: { binding?: unknown },
 ): LanguageModel {
   const config = getAIConfig(env);
   const selectedProvider = provider || config.defaultProvider;
@@ -180,7 +180,7 @@ export function getAdvancedModel(
   env: AIEnvironment,
   modelId?: string,
   provider?: ModelProvider,
-  options?: { binding?: any },
+  options?: { binding?: unknown },
 ): LanguageModel {
   const config = getAIConfig(env);
   const selectedProvider = provider || config.defaultProvider;
@@ -200,7 +200,7 @@ export function getCustomModel(
   env: AIEnvironment,
   provider: ModelProvider,
   modelId: string,
-  options?: { binding?: any },
+  options?: { binding?: unknown },
 ): LanguageModel {
   return getModelInstance(provider, modelId, env, options);
 }

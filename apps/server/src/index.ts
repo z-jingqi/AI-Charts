@@ -27,7 +27,7 @@ interface Env {
   OPENROUTER_API_KEY?: string;
   CLOUDFLARE_ACCOUNT_ID?: string;
   CLOUDFLARE_API_KEY?: string;
-  AI?: any; // Cloudflare Workers AI binding (optional)
+  AI?: unknown; // Cloudflare Workers AI binding (optional)
 }
 
 const app = new Hono<{ Bindings: Env }>();

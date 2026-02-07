@@ -1,10 +1,17 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+interface Metric {
+  key: string;
+  name: string;
+  value: string | number;
+  unit?: string;
+}
+
 interface SaveRecordParams {
   data: {
     title: string;
     date: string;
-    metrics: any[];
+    metrics: Metric[];
   };
 }
 
@@ -22,7 +29,7 @@ export function useSaveRecord() {
             category: params.data.title,
             date: params.data.date,
             summary: params.data.metrics.length,
-            items: params.data.metrics.map((m: any) => ({
+            items: params.data.metrics.map((m) => ({
               key: m.key,
               name: m.name,
               value: typeof m.value === 'string' ? parseFloat(m.value) : m.value,

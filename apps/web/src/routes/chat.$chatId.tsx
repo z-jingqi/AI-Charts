@@ -5,6 +5,14 @@ import { useCanvas } from '@/context/canvas-context';
 import { MessageList } from '@/components/chat/message-list';
 import { ChatInput } from '@/components/chat/chat-input';
 
+/** Shape of the render_ui tool output (defined in server/ai/tools.ts) */
+interface RenderUIOutput {
+  render: boolean;
+  component: string;
+  props: Record<string, unknown>;
+  contentType: 'chart' | 'form' | 'pdf';
+}
+
 export const Route = createFileRoute('/chat/$chatId')({
   component: ChatPage,
 });
@@ -13,22 +21,20 @@ function ChatPage() {
   const { chatId } = Route.useParams();
   const { openCanvas } = useCanvas();
 
-  // Use the new Vercel AI SDK Multi-modal Chat API (ai v4/v6)
   const { messages, sendMessage, status } = useChat({
     id: chatId,
     transport: new DefaultChatTransport({ api: '/api/chat' }),
     onFinish: ({ message }) => {
       // Check for render_ui tool call results in the message parts
-      if (message.parts) {
-        message.parts.forEach((part: any) => {
-          if (part.type === 'tool-invocation') {
-            const toolInvocation = part.toolInvocation;
-            if (toolInvocation.state === 'result' && toolInvocation.toolName === 'render_ui') {
-              const { component, props, contentType } = toolInvocation.result;
-              openCanvas(contentType, [{ component, props }]);
-            }
-          }
-        });
+      for (const part of message.parts) {
+        if (
+          part.type === 'dynamic-tool' &&
+          part.toolName === 'render_ui' &&
+          part.state === 'output-available'
+        ) {
+          const { component, props, contentType } = part.output as RenderUIOutput;
+          openCanvas(contentType, [{ component, props }]);
+        }
       }
     },
   });
