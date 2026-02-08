@@ -41,17 +41,21 @@ function ChatPage() {
 
   const isLoading = status === 'submitted' || status === 'streaming';
 
-  const handleSend = async (content: string) => {
-    // sendMessage handles the UI state and API call
-    sendMessage({ text: content });
-  };
+  const handleSend = async (content: string, files?: File[]) => {
+    if (files && files.length > 0) {
+      // Convert File[] to FileList-like structure for the SDK
+      const dt = new DataTransfer();
+      files.forEach((f) => dt.items.add(f));
 
-  const handleUpload = (files: FileList) => {
-    console.log('Uploading files:', files);
-    sendMessage({
-      text: `Uploaded ${files.length} file(s) for analysis.`,
-      files: files,
-    });
+      // If user didn't type anything, send a minimal prompt.
+      // The AI will see the image and use the system prompt to infer intent.
+      sendMessage({
+        text: content || '[User attached image(s) without text — analyze the content and take appropriate action]',
+        files: dt.files,
+      });
+    } else {
+      sendMessage({ text: content });
+    }
   };
 
   return (
@@ -61,7 +65,7 @@ function ChatPage() {
       </div>
 
       <div className="w-full max-w-3xl mx-auto">
-        <ChatInput onSend={handleSend} onUpload={handleUpload} disabled={isLoading} />
+        <ChatInput onSend={handleSend} disabled={isLoading} />
       </div>
     </div>
   );

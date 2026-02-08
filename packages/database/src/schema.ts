@@ -10,13 +10,18 @@ export const records = sqliteTable(
     id: text('id').primaryKey(), // UUID (generated with crypto.randomUUID())
     userId: text('user_id').notNull(),
     type: text('type', { enum: ['health', 'finance'] }).notNull(),
+    title: text('title'), // Human-readable name (e.g., "Annual Blood Test")
     category: text('category').notNull(), // e.g., 'blood_test', 'invoice'
     date: integer('date', { mode: 'timestamp' }).notNull(), // Unix timestamp for easier sorting
     summaryValue: real('summary_value'), // Key value for quick graphing
+    source: text('source', { enum: ['chat', 'upload', 'manual'] }), // Data provenance
     rawContent: text('raw_content').notNull(), // JSON string of full AI extraction
     createdAt: integer('created_at', { mode: 'timestamp' })
       .notNull()
-      .$defaultFn(() => new Date()), // Default to current timestamp
+      .$defaultFn(() => new Date()),
+    updatedAt: integer('updated_at', { mode: 'timestamp' })
+      .notNull()
+      .$defaultFn(() => new Date()),
   },
   (table) => [
     index('idx_records_user_id').on(table.userId),

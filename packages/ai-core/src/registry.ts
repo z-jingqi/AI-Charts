@@ -7,7 +7,7 @@ import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createOpenAI } from '@ai-sdk/openai';
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { createOpenRouter } from '@openrouter/ai-sdk-provider';
-import { createWorkersAI } from 'workers-ai-provider';
+import { createWorkersAI, type WorkersAISettings, type WorkersAI } from 'workers-ai-provider';
 import { getAIConfig, type AIEnvironment, type ModelProvider } from './config';
 import type { LanguageModel } from 'ai';
 
@@ -39,9 +39,9 @@ const DEFAULT_MODELS: Record<
     advanced: 'deepseek-reasoner',
   },
   openrouter: {
-    vision: 'google/gemini-2.0-flash-exp:free',
-    reasoning: 'google/gemini-2.0-flash-exp:free',
-    advanced: 'anthropic/claude-3.5-sonnet',
+    vision: 'google/gemma-3-27b-it:free',
+    reasoning: 'google/gemma-3-27b-it:free',
+    advanced: 'google/gemma-3-27b-it:free',
   },
   cloudflare: {
     vision: '@cf/meta/llama-3.2-11b-vision-instruct',
@@ -119,8 +119,11 @@ function getModelInstance(
       if (!options?.binding) {
         throw new Error('Cloudflare Workers AI binding is required. Pass the AI binding from env.');
       }
-      const workersai = createWorkersAI({ binding: options.binding });
-      return workersai(modelId);
+      // binding is a Cloudflare Workers runtime `Ai` type and modelId is a
+      // `TextGenerationModels` union — neither is available in this package's
+      // tsconfig, so we assert via the library's own exported types.
+      const workersai = createWorkersAI({ binding: options.binding } as WorkersAISettings);
+      return workersai(modelId as Parameters<WorkersAI>[0]);
     }
 
     default:

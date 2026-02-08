@@ -8,6 +8,13 @@
       "when": 1767952224922,
       "tag": "0000_flaky_talos",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1770510771009,
+      "tag": "0001_futuristic_red_ghost",
+      "breakpoints": true
     }
   ]
 }

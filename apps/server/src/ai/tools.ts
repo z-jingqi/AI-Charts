@@ -1,6 +1,6 @@
 /**
- * AI Tools for Database Queries
- * These tools allow the AI chat model to query the database
+ * AI Tools for Database Queries and Mutations
+ * These tools allow the AI chat model to query, create, update and delete records
  */
 
 import { tool } from 'ai';
@@ -8,6 +8,8 @@ import { z } from 'zod';
 import { eq, and, gte, lte, sql } from 'drizzle-orm';
 import type { DrizzleD1Database } from '@ai-chart/database';
 import { records, metrics, schema } from '@ai-chart/database';
+import { MetricItemSchema } from '@ai-chart/shared';
+import { saveRecordData, saveMultipleRecords, updateRecordData, deleteRecordData } from '../services/record-data';
 
 /**
  * Get AI tools for database interaction
@@ -241,6 +243,169 @@ export function getTools(db: DrizzleD1Database<typeof schema>) {
           props,
           contentType,
         };
+      },
+    }),
+
+    /**
+     * Save a new health or finance record to the database
+     */
+    save_record: tool({
+      description:
+        'Save a new health or finance record with its metrics to the database. Use this after extracting data from an image or when the user provides data to save. Returns the new record ID.',
+      inputSchema: z.object({
+        type: z.enum(['health', 'finance']).describe('Type of record'),
+        title: z
+          .string()
+          .optional()
+          .describe('Human-readable title (e.g., "Annual Blood Test 2024")'),
+        category: z.string().describe('Category (e.g., "blood_test", "physical_exam", "invoice")'),
+        date: z.string().describe('Record date in ISO format (YYYY-MM-DD)'),
+        summary: z.number().optional().describe('Key summary value for quick charting'),
+        items: z.array(MetricItemSchema).describe('List of metric items to save'),
+      }),
+      execute: async ({ type, title, category, date, summary, items }) => {
+        try {
+          const { recordId, itemsCount } = await saveRecordData(
+            db,
+            { type, title, category, date, summary, items },
+            'default-user',
+            'chat',
+          );
+          return {
+            success: true,
+            recordId,
+            itemsCount,
+            message: `Record saved successfully with ${itemsCount} metrics`,
+          };
+        } catch (error) {
+          return {
+            success: false,
+            error: error instanceof Error ? error.message : 'Failed to save record',
+          };
+        }
+      },
+    }),
+
+    /**
+     * Batch save multiple records at once (e.g., one image with blood test + urine test)
+     */
+    save_records: tool({
+      description:
+        'Save multiple records at once. Use this when a single image or input contains multiple distinct test categories ' +
+        '(e.g., blood test + urine test + liver function). Each record should have its own category and metrics. ' +
+        'This is more efficient than calling save_record multiple times.',
+      inputSchema: z.object({
+        records: z.array(
+          z.object({
+            type: z.enum(['health', 'finance']).describe('Type of record'),
+            title: z.string().optional().describe('Human-readable title (e.g., "Blood Test - 2024 Annual")'),
+            category: z.string().describe('Category (e.g., "blood_test", "urine_test", "liver_function")'),
+            date: z.string().describe('Record date in ISO format (YYYY-MM-DD)'),
+            summary: z.number().optional().describe('Key summary value'),
+            items: z.array(MetricItemSchema).describe('List of metric items for this record'),
+          }),
+        ).min(1).describe('Array of records to save, each with its own category and metrics'),
+      }),
+      execute: async ({ records: recordsData }) => {
+        try {
+          const results = await saveMultipleRecords(
+            db,
+            recordsData,
+            'default-user',
+            'chat',
+          );
+          const totalMetrics = results.reduce((sum, r) => sum + r.itemsCount, 0);
+          return {
+            success: true,
+            savedCount: results.length,
+            totalMetrics,
+            records: results,
+            message: `Saved ${results.length} records with ${totalMetrics} total metrics`,
+          };
+        } catch (error) {
+          return {
+            success: false,
+            error: error instanceof Error ? error.message : 'Failed to save records',
+          };
+        }
+      },
+    }),
+
+    /**
+     * Update an existing record
+     */
+    update_record: tool({
+      description:
+        'Update an existing record. Can update title, date, category, and/or replace all metrics. Use query_records or get_latest_records first to find the record ID.',
+      inputSchema: z.object({
+        recordId: z.string().describe('The ID of the record to update'),
+        title: z.string().optional().describe('New title for the record'),
+        date: z.string().optional().describe('New date in ISO format (YYYY-MM-DD)'),
+        category: z.string().optional().describe('New category'),
+        summary: z.number().optional().describe('New summary value'),
+        items: z
+          .array(MetricItemSchema)
+          .optional()
+          .describe('New list of metrics (replaces all existing metrics)'),
+      }),
+      execute: async ({ recordId, title, date, category, summary, items }) => {
+        try {
+          // Verify record exists
+          const existing = await db
+            .select({ id: records.id })
+            .from(records)
+            .where(eq(records.id, recordId))
+            .limit(1);
+          if (existing.length === 0) {
+            return { success: false, error: `Record with ID "${recordId}" not found` };
+          }
+
+          await updateRecordData(db, recordId, { title, date, category, summary, items });
+          return {
+            success: true,
+            message: `Record ${recordId} updated successfully`,
+          };
+        } catch (error) {
+          return {
+            success: false,
+            error: error instanceof Error ? error.message : 'Failed to update record',
+          };
+        }
+      },
+    }),
+
+    /**
+     * Delete a record
+     */
+    delete_record: tool({
+      description:
+        'Delete a record and all its associated metrics from the database. This action is irreversible. Always confirm with the user before deleting.',
+      inputSchema: z.object({
+        recordId: z.string().describe('The ID of the record to delete'),
+      }),
+      execute: async ({ recordId }) => {
+        try {
+          // Verify record exists
+          const existing = await db
+            .select({ id: records.id, title: records.title, category: records.category })
+            .from(records)
+            .where(eq(records.id, recordId))
+            .limit(1);
+          if (existing.length === 0) {
+            return { success: false, error: `Record with ID "${recordId}" not found` };
+          }
+
+          await deleteRecordData(db, recordId);
+          return {
+            success: true,
+            message: `Record "${existing[0].title || existing[0].category}" deleted successfully`,
+          };
+        } catch (error) {
+          return {
+            success: false,
+            error: error instanceof Error ? error.message : 'Failed to delete record',
+          };
+        }
       },
     }),
   };

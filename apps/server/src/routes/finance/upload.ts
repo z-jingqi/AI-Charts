@@ -72,6 +72,7 @@ financeUploadRoute.post('/', async (c) => {
       db,
       financeData,
       userId || 'default-user',
+      'upload',
     );
 
     return c.json({

@@ -1,6 +1,6 @@
 import { Renderer, flatToTree, ActionProvider } from '@json-render/react';
 import type { UITree } from '@json-render/core';
-import { useSaveRecord } from '@/hooks/use-records';
+import { useSaveRecord, type SaveRecordParams } from '@/hooks/use-dashboard';
 import { registry } from './catalog';
 import { useCanvas } from '@/context/canvas-context';
 import type { CanvasComponentData } from '@/context/canvas-context';
@@ -30,11 +30,11 @@ export function CanvasRenderer() {
       )
     : (data as UITree);
 
-  const handleAction = async (name: string, params: any) => {
+  const handleAction = async (name: string, params: unknown) => {
     console.log(`Canvas Action Triggered: ${name}`, params);
 
     if (name === 'save_record') {
-      saveRecordMutation.mutate(params, {
+      saveRecordMutation.mutate(params as SaveRecordParams, {
         onSuccess: () => {
           alert('Record saved successfully!');
         },

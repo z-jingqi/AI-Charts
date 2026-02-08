@@ -3,7 +3,7 @@ import type { UITree } from '@json-render/core';
 
 export type CanvasComponentData = {
   component: string;
-  props: Record<string, any>;
+  props: Record<string, unknown>;
 };
 
 export type CanvasData = UITree | CanvasComponentData[];

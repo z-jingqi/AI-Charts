@@ -56,6 +56,7 @@ financeRecordsRoute.post('/', async (c) => {
       db,
       financeData,
       userId || 'default-user',
+      'manual',
     );
 
     return c.json({

@@ -1,7 +1,7 @@
 import type { UIMessage } from 'ai';
 import { TextPart } from './parts/text-part';
 import { ReasoningPart } from './parts/reasoning-part';
-import { ToolInvocationPart } from './parts/tool-part';
+import { ToolInvocationPart, type ToolInvocationPartProps } from './parts/tool-part';
 import { FilePart } from '@/components/chat/parts/file-part';
 
 type MessagePart = UIMessage['parts'][number];
@@ -26,8 +26,17 @@ export function MessagePartRenderer({ part, isStreaming }: MessagePartRendererPr
 
   if (part.type === 'dynamic-tool' || part.type.startsWith('tool-')) {
     const toolName = part.type === 'dynamic-tool' ? part.toolName : part.type.slice(5);
-    const toolCallId = (part as any).toolCallId;
-    return <ToolInvocationPart toolName={toolName} toolCallId={toolCallId} />;
+    const toolCallId = (part as Record<string, unknown>).toolCallId as string;
+    const state = (part as Record<string, unknown>).state as string | undefined;
+    const errorText = (part as Record<string, unknown>).errorText as string | undefined;
+    return (
+      <ToolInvocationPart
+        toolName={toolName}
+        toolCallId={toolCallId}
+        state={state as ToolInvocationPartProps['state']}
+        errorText={errorText}
+      />
+    );
   }
 
   return (

@@ -68,7 +68,12 @@ healthUploadRoute.post('/', async (c) => {
     });
 
     const db = createDb(c.env.DB);
-    const { recordId, itemsCount } = await saveRecordData(db, healthData, userId || 'default-user');
+    const { recordId, itemsCount } = await saveRecordData(
+      db,
+      healthData,
+      userId || 'default-user',
+      'upload',
+    );
 
     return c.json({
       success: true,

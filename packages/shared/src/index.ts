@@ -46,6 +46,7 @@ export const MetricItemSchema = z.object({
  */
 export const RecordDataSchema = z.object({
   type: z.enum(['health', 'finance']).describe('Type of record'),
+  title: z.string().optional().describe('Human-readable title (e.g., "Annual Blood Test")'),
   category: z.string().describe('Category (e.g., "blood_test", "invoice")'),
   date: z.string().describe('ISO date string (YYYY-MM-DD)'),
   summary: z.number().optional().describe('Key summary value for quick charting'),
