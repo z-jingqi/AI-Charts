@@ -4,6 +4,7 @@ import { DefaultChatTransport } from 'ai';
 import { useCanvas } from '@/context/canvas-context';
 import { MessageList } from '@/components/chat/message-list';
 import { ChatInput } from '@/components/chat/chat-input';
+import { API_BASE } from '@/lib/api';
 
 /** Shape of the render_ui tool output (defined in server/ai/tools.ts) */
 interface RenderUIOutput {
@@ -23,7 +24,7 @@ function ChatPage() {
 
   const { messages, sendMessage, status } = useChat({
     id: chatId,
-    transport: new DefaultChatTransport({ api: '/api/chat' }),
+    transport: new DefaultChatTransport({ api: `${API_BASE}/api/chat` }),
     onFinish: ({ message }) => {
       // Check for render_ui tool call results in the message parts
       for (const part of message.parts) {

@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiFetch } from '@/lib/api';
 
 // ========================================
 // Types
@@ -121,7 +122,7 @@ export function useRecords(filters: RecordFilters = {}) {
       }
 
       const qs = params.toString();
-      const res = await fetch(`/api/records${qs ? `?${qs}` : ''}`);
+      const res = await apiFetch(`/api/records${qs ? `?${qs}` : ''}`);
       if (!res.ok) {
         throw new Error('Failed to fetch records');
       }
@@ -148,7 +149,7 @@ export function useRecord(id: string | null) {
       if (!id) {
         throw new Error('No record ID');
       }
-      const res = await fetch(`/api/records/${id}`);
+      const res = await apiFetch(`/api/records/${id}`);
       if (!res.ok) {
         throw new Error('Failed to fetch record');
       }
@@ -167,7 +168,7 @@ export function useUpdateRecord() {
 
   return useMutation({
     mutationFn: async ({ id, ...updates }: UpdateRecordParams) => {
-      const res = await fetch(`/api/records/${id}`, {
+      const res = await apiFetch(`/api/records/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
@@ -193,7 +194,7 @@ export function useDeleteRecord() {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/records/${id}`, { method: 'DELETE' });
+      const res = await apiFetch(`/api/records/${id}`, { method: 'DELETE' });
       if (!res.ok) {
         const err = await res.json();
         throw new Error((err as { message?: string }).message || 'Failed to delete record');
@@ -214,7 +215,7 @@ export function useSaveRecord() {
 
   return useMutation({
     mutationFn: async (params: SaveRecordParams) => {
-      const response = await fetch('/api/records', {
+      const response = await apiFetch(`/api/records`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
