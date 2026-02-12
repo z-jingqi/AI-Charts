@@ -30,7 +30,7 @@ command = "npm run build"
 # D1 Database Binding
 [[d1_databases]]
 binding = "DB"
-database_name = "ai-chart-db"
+database_name = "chart"
 database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 migrations_dir = "../../packages/database/drizzle"
 
